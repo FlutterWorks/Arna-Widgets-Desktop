@@ -102,7 +102,7 @@ class _ArnaPopupDialog extends StatelessWidget {
                   title: title,
                   headerBarTrailing: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       if (headerBarTrailing != null) headerBarTrailing!,
                       ArnaTextButton(
                         label: "Close",
@@ -190,7 +190,7 @@ class _ArnaPopupPage extends StatelessWidget {
     return ArnaScaffold(
       headerBarLeading: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           ArnaIconButton(
             icon: Icons.arrow_back_outlined,
             onPressed: () => Navigator.pop(context),

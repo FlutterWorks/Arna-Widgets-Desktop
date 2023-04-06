@@ -1,271 +1,153 @@
 import 'package:arna/arna.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart' show Brightness;
 
-const _ArnaThemeDefaults _kDefaultTheme = _ArnaThemeDefaults(
-  null,
-  ArnaColors.accentColor,
-  _ArnaTextThemeDefaults(ArnaColors.primaryTextColor),
-);
-
-/// Styling specifications for a [ArnaTheme].
+/// Styling specifications for an [ArnaTheme].
 ///
 /// All constructor parameters can be null.
 ///
-/// Parameters can also be partially specified, in which case some parameters
-/// will cascade down to other dependent parameters to create a cohesive
-/// visual effect.
+/// Parameters can also be partially specified, in which case some parameters will cascade down to other dependent
+/// parameters to create a cohesive visual effect.
 ///
 /// See also:
 ///
 ///  * [ArnaTheme], in which this [ArnaThemeData] is inserted.
 @immutable
-class ArnaThemeData extends NoDefaultArnaThemeData with Diagnosticable {
-  /// Creates a [ArnaTheme] styling specification.
-  const ArnaThemeData({
-    Brightness? brightness,
-    Color? accentColor,
-    ArnaTextThemeData? textTheme,
-  }) : this.raw(brightness, accentColor, textTheme);
-
-  /// Same as the default constructor but with positional arguments to avoid
-  /// forgetting any and to specify all arguments.
-  ///
-  /// Used by subclasses to get the superclass's defaulting behaviors.
-  @protected
-  const ArnaThemeData.raw(
-    Brightness? brightness,
-    Color? accentColor,
-    ArnaTextThemeData? textTheme,
-  ) : this._rawWithDefaults(
-          brightness,
-          accentColor,
-          textTheme,
-          _kDefaultTheme,
-        );
-
-  const ArnaThemeData._rawWithDefaults(
-    Brightness? brightness,
-    Color? accentColor,
-    ArnaTextThemeData? textTheme,
-    this._defaults,
-  ) : super(
-          brightness: brightness,
-          accentColor: accentColor,
-          textTheme: textTheme,
-        );
-
-  final _ArnaThemeDefaults _defaults;
-
-  @override
-  Color get accentColor => super.accentColor ?? _defaults.accentColor;
-
-  @override
-  ArnaTextThemeData get textTheme {
-    return super.textTheme ?? _defaults.textThemeDefaults.createDefaults();
-  }
-
-  @override
-  NoDefaultArnaThemeData noDefault() {
-    return NoDefaultArnaThemeData(
-      brightness: super.brightness,
-      accentColor: super.accentColor,
-      textTheme: super.textTheme,
-    );
-  }
-
-  @override
-  ArnaThemeData resolveFrom(BuildContext context) {
-    return ArnaThemeData._rawWithDefaults(
-      brightness,
-      ArnaDynamicColor.maybeResolve(super.accentColor, context),
-      super.textTheme?.resolveFrom(context),
-      _defaults.resolveFrom(context, super.textTheme == null),
-    );
-  }
-
-  @override
-  ArnaThemeData copyWith({
-    Brightness? brightness,
-    Color? accentColor,
-    ArnaTextThemeData? textTheme,
-  }) {
-    return ArnaThemeData._rawWithDefaults(
-      brightness ?? super.brightness,
-      accentColor ?? super.accentColor,
-      textTheme ?? super.textTheme,
-      _defaults,
-    );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    const ArnaThemeData defaultData = ArnaThemeData();
-    properties.add(
-      EnumProperty<Brightness>('brightness', brightness, defaultValue: null),
-    );
-    properties.add(
-      createArnaColorProperty(
-        'accentColor',
-        accentColor,
-        defaultValue: defaultData.accentColor,
-      ),
-    );
-    textTheme.debugFillProperties(properties);
-  }
-}
-
-/// Styling specifications for an Arna theme without default values for
-/// unspecified properties.
-///
-/// Unlike [ArnaThemeData] instances of this class do not return default
-/// values for properties that have been left unspecified in the constructor.
-/// Instead, unspecified properties will return null.
-///
-/// See also:
-///
-///  * [ArnaThemeData], which uses reasonable default values for
-///    unspecified theme properties.
-class NoDefaultArnaThemeData {
-  /// Creates a [NoDefaultArnaThemeData] styling specification.
-  ///
-  /// Unspecified properties default to null.
-  const NoDefaultArnaThemeData({
-    this.brightness,
-    this.accentColor,
-    this.textTheme,
-  });
-
-  /// The brightness override for Arna descendants.
-  ///
-  /// Defaults to null. If a non-null [Brightness] is specified, the value will
-  /// take precedence over the ambient [MediaQueryData.platformBrightness], when
-  /// determining the brightness of descendant Arna widgets.
-  ///
+class ArnaThemeData with Diagnosticable {
+  /// Create an [ArnaThemeData] that's used to configure an [ArnaTheme].
   ///
   /// See also:
   ///
-  ///  * [ArnaTheme.brightnessOf], a method used to retrieve the overall
-  ///    [Brightness] from a [BuildContext], for Arna widgets.
-  final Brightness? brightness;
+  ///  * [ArnaThemeData.light], which creates a light theme.
+  ///  * [ArnaThemeData.dark], which creates dark theme.
+  factory ArnaThemeData({
+    final Brightness? brightness,
+    final Color? accentColor,
+    final ArnaTextTheme? textTheme,
+  }) {
+    final ArnaTextTheme defaultTextTheme = brightness == Brightness.dark
+        ? ArnaTypography.dark
+        : ArnaTypography.light;
+
+    return ArnaThemeData.raw(
+      accentColor: accentColor ?? ArnaColors.blue,
+      brightness: brightness,
+      textTheme: textTheme ?? defaultTextTheme,
+    );
+  }
+
+  /// Create an [ArnaThemeData] given a set of exact values. All the values must be specified. They all must also be
+  /// non-null.
+  ///
+  /// This will rarely be used directly. It is used by [lerp] to create intermediate themes based on two themes created
+  /// with the [ArnaThemeData] constructor.
+  const ArnaThemeData.raw({
+    required this.accentColor,
+    required this.brightness,
+    required this.textTheme,
+  });
+
+  /// A default light theme.
+  factory ArnaThemeData.light() => ArnaThemeData(
+        brightness: Brightness.light,
+        textTheme: ArnaTypography.light,
+      );
+
+  /// A default dark theme.
+  factory ArnaThemeData.dark() => ArnaThemeData(
+        brightness: Brightness.dark,
+        textTheme: ArnaTypography.dark,
+      );
 
   /// A color used on interactive elements of the theme.
   ///
   /// This color is generally used on tappable elements.
-  /// Defaults to [ArnaColors.accentColor].
-  final Color? accentColor;
+  /// Defaults to [ArnaColors.blue].
+  final Color accentColor;
+
+  /// The brightness override for Arna descendants.
+  ///
+  /// See also:
+  ///
+  ///  * [ArnaTheme.brightnessOf], a method used to retrieve the overall [Brightness] from a [BuildContext], for Arna
+  ///    widgets.
+  final Brightness? brightness;
 
   /// Text styles used by Arna widgets.
-  final ArnaTextThemeData? textTheme;
+  final ArnaTextTheme textTheme;
 
-  /// Returns an instance of the theme data whose property getters only return
-  /// the construction time specifications with no derived values.
-  NoDefaultArnaThemeData noDefault() => this;
-
-  /// Returns a new theme data with all its colors resolved against the
-  /// given [BuildContext].
-  ///
-  /// Called by [ArnaTheme.of] to resolve colors defined in the retrieved
-  /// [ArnaThemeData].
-  @protected
-  NoDefaultArnaThemeData resolveFrom(BuildContext context) {
-    return NoDefaultArnaThemeData(
-      brightness: brightness,
-      accentColor: ArnaDynamicColor.maybeResolve(
-        accentColor,
-        context,
-      ),
-      textTheme: textTheme?.resolveFrom(context),
-    );
-  }
-
-  /// Creates a copy of the theme data with specified attributes overridden.
-  ///
-  /// Only the current instance's specified attributes are copied instead of
-  /// derived values. For instance, if the current [textTheme] is implied from
-  /// the current [accentColor] because it was not specified, copying with a
-  /// different [accentColor] will also change the copy's implied [textTheme].
-  NoDefaultArnaThemeData copyWith({
-    Brightness? brightness,
-    Color? accentColor,
-    ArnaTextThemeData? textTheme,
+  /// Creates a copy of this theme but with the given fields replaced with the new values.
+  ArnaThemeData copyWith({
+    final Brightness? brightness,
+    final Color? accentColor,
+    final ArnaTextTheme? textTheme,
   }) {
-    return NoDefaultArnaThemeData(
-      brightness: brightness ?? this.brightness,
+    return ArnaThemeData.raw(
       accentColor: accentColor ?? this.accentColor,
+      brightness: brightness ?? this.brightness,
       textTheme: textTheme ?? this.textTheme,
     );
   }
-}
 
-@immutable
-class _ArnaThemeDefaults {
-  const _ArnaThemeDefaults(
-    this.brightness,
-    this.accentColor,
-    this.textThemeDefaults,
-  );
-
-  final Brightness? brightness;
-  final Color accentColor;
-  final _ArnaTextThemeDefaults textThemeDefaults;
-
-  _ArnaThemeDefaults resolveFrom(BuildContext context, bool resolveTextTheme) {
-    return _ArnaThemeDefaults(
-      brightness,
-      ArnaDynamicColor.resolve(accentColor, context),
-      resolveTextTheme
-          ? textThemeDefaults.resolveFrom(context)
-          : textThemeDefaults,
+  /// Linearly interpolate between two themes.
+  ///
+  /// The arguments must not be null.
+  ///
+  /// {@macro dart.ui.shadow.lerp}
+  static ArnaThemeData lerp(
+    final ArnaThemeData a,
+    final ArnaThemeData b,
+    final double t,
+  ) {
+    return ArnaThemeData.raw(
+      accentColor: t < 0.5 ? a.accentColor : b.accentColor,
+      brightness: t < 0.5 ? a.brightness : b.brightness,
+      textTheme: t < 0.5 ? a.textTheme : b.textTheme,
     );
   }
-}
-
-@immutable
-class _ArnaTextThemeDefaults {
-  const _ArnaTextThemeDefaults(this.labelColor);
-
-  final Color labelColor;
-
-  _ArnaTextThemeDefaults resolveFrom(BuildContext context) =>
-      _ArnaTextThemeDefaults(
-        ArnaDynamicColor.resolve(labelColor, context),
-      );
-
-  ArnaTextThemeData createDefaults() => _DefaultArnaTextThemeData(
-        labelColor: labelColor,
-      );
-}
-
-// ArnaTextThemeData with no text styles explicitly specified.
-// The implementation of this class may need to be updated when any of the default
-// text styles changes.
-class _DefaultArnaTextThemeData extends ArnaTextThemeData {
-  const _DefaultArnaTextThemeData({required this.labelColor}) : super();
-
-  final Color labelColor;
 
   @override
-  TextStyle get largeTitleTextStyle =>
-      super.largeTitleTextStyle.copyWith(color: labelColor);
+  bool operator ==(final Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is ArnaThemeData &&
+        other.accentColor == accentColor &&
+        other.brightness == brightness &&
+        other.textTheme == textTheme;
+  }
 
   @override
-  TextStyle get titleTextStyle =>
-      super.titleTextStyle.copyWith(color: labelColor);
+  int get hashCode {
+    final List<Object?> values = <Object?>[accentColor, brightness, textTheme];
+    return Object.hashAll(values);
+  }
 
   @override
-  TextStyle get textStyle => super.textStyle.copyWith(color: labelColor);
-
-  @override
-  TextStyle get subtitleTextStyle =>
-      super.subtitleTextStyle.copyWith(color: labelColor);
-
-  @override
-  TextStyle get buttonTextStyle =>
-      super.buttonTextStyle.copyWith(color: labelColor);
-
-  @override
-  TextStyle get captionTextStyle =>
-      super.captionTextStyle.copyWith(color: labelColor);
+  void debugFillProperties(final DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    final ArnaThemeData defaultData = ArnaThemeData.light();
+    properties.add(
+      ColorProperty(
+        'accentColor',
+        accentColor,
+        defaultValue: defaultData.accentColor,
+        level: DiagnosticLevel.debug,
+      ),
+    );
+    properties.add(
+      EnumProperty<Brightness>(
+        'brightness',
+        brightness,
+        defaultValue: defaultData.brightness,
+        level: DiagnosticLevel.debug,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<ArnaTextTheme>(
+        'textTheme',
+        textTheme,
+        level: DiagnosticLevel.debug,
+      ),
+    );
+  }
 }

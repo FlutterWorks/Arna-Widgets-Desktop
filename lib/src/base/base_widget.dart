@@ -27,37 +27,65 @@ typedef ArnaBaseWidgetBuilder = Widget Function(
 /// See also:
 ///
 ///  * [ArnaButton]
-///  * [ArnaIconButton]
-///  * [ArnaTextButton]
-///  * [ArnaBottomBarItem]
 ///  * [ArnaMasterItem]
 ///  * [ArnaSideBarItem]
 ///  * [ArnaLinkedButtons]
-///  * [ArnaCheckBox]
+///  * [ArnaCheckbox]
 ///  * [ArnaRadio]
 ///  * [ArnaSwitch]
 class ArnaBaseWidget extends StatefulWidget {
   /// Creates a base widget.
   const ArnaBaseWidget({
-    Key? key,
+    super.key,
     required this.builder,
     this.onPressed,
+    this.onLongPress,
+    this.onHorizontalDragStart,
+    this.onHorizontalDragEnd,
+    this.onVerticalDragStart,
+    this.onVerticalDragEnd,
     this.tooltipMessage,
-    this.showAnimation = true,
+    this.focusNode,
     this.isFocusable = true,
+    this.showAnimation = true,
     this.autofocus = false,
     this.cursor = MouseCursor.defer,
     this.semanticLabel,
-  }) : super(key: key);
+    this.enableFeedback = true,
+  });
 
   /// The base builder for widgets.
   final ArnaBaseWidgetBuilder builder;
 
   /// The callback that is called when a widget is tapped.
+  ///
+  /// If this callback and [onLongPress] are null, then the widget will be disabled.
   final VoidCallback? onPressed;
+
+  /// The callback that is called when a widget is long-pressed.
+  ///
+  /// If this callback and [onPressed] are null, then the widget will be disabled.
+  final VoidCallback? onLongPress;
+
+  /// A pointer has contacted the screen and has begun to move horizontally.
+  final GestureDragStartCallback? onHorizontalDragStart;
+
+  /// A pointer that was previously in contact with the screen and moving horizontally is no longer in contact with the
+  /// screen and was moving at a specific velocity when it stopped contacting the screen.
+  final GestureDragEndCallback? onHorizontalDragEnd;
+
+  /// A pointer has contacted the screen and has begun to move vertically.
+  final GestureDragStartCallback? onVerticalDragStart;
+
+  /// A pointer that was previously in contact with the screen and moving vertically is no longer in contact with the
+  /// screen and was moving at a specific velocity when it stopped contacting the screen.
+  final GestureDragEndCallback? onVerticalDragEnd;
 
   /// The tooltip message of the widget.
   final String? tooltipMessage;
+
+  /// The focus node of the widget.
+  final FocusNode? focusNode;
 
   /// Whether this widget is focusable or not.
   final bool isFocusable;
@@ -65,24 +93,32 @@ class ArnaBaseWidget extends StatefulWidget {
   /// Whether to show animation or not.
   final bool showAnimation;
 
-  /// Whether this widget should focus itself if nothing else is already
-  /// focused.
+  /// Whether this widget should focus itself if nothing else is already focused.
   final bool autofocus;
 
-  /// The cursor for a mouse pointer when it enters or is hovering over the
-  /// widget.
+  /// The cursor for a mouse pointer when it enters or is hovering over the widget.
   final MouseCursor cursor;
 
   /// The semantic label of the widget.
   final String? semanticLabel;
 
+  /// Whether detected gestures should provide acoustic and/or haptic feedback.
+  ///
+  /// For example, on Android a long-press will produce a short vibration, when feedback is enabled.
+  ///
+  /// See also:
+  ///
+  ///  * [ArnaFeedback] for providing platform-specific feedback to certain actions.
+  final bool enableFeedback;
+
   @override
-  _ArnaBaseWidgetState createState() => _ArnaBaseWidgetState();
+  State<ArnaBaseWidget> createState() => _ArnaBaseWidgetState();
 }
 
+/// The [State] for an [ArnaBaseWidget].
 class _ArnaBaseWidgetState extends State<ArnaBaseWidget>
     with SingleTickerProviderStateMixin {
-  FocusNode? focusNode;
+  FocusNode? _focusNode;
   bool _hover = false;
   bool _focused = false;
   bool _pressed = false;
@@ -93,145 +129,207 @@ class _ArnaBaseWidgetState extends State<ArnaBaseWidget>
   late Map<Type, Action<Intent>> _actions;
   late Map<ShortcutActivator, Intent> _shortcuts;
 
-  /// Whether the widget is enabled or disabled. Widgets are disabled by
-  /// default.
-  /// To enable a widget, set its [onPressed] property to a non-null value.
-  bool get isEnabled => widget.onPressed != null;
+  /// Whether the widget is enabled or disabled. Widgets are disabled by default.
+  /// To enable a widget, set its [onPressed] or [onLongPress] property to a non-null value.
+  bool get _isEnabled => widget.onPressed != null || widget.onLongPress != null;
+
+  FocusNode get _effectiveFocusNode =>
+      widget.focusNode ?? (_focusNode ??= FocusNode());
 
   @override
   void initState() {
     super.initState();
-    if (widget.showAnimation) {
-      _controller = AnimationController(
-        vsync: this,
-        duration: Styles.basicDuration,
-        value: 1.0,
-        upperBound: 1.0,
-        lowerBound: 0.7,
-      );
-      _animation = CurvedAnimation(
-        parent: _controller,
-        curve: Styles.basicCurve,
-      );
+    _controller = AnimationController(
+      value: 1.0,
+      duration: Styles.baseWidgetDuration,
+      debugLabel: 'ArnaBaseWidget',
+      lowerBound: 0.7,
+      vsync: this,
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Styles.basicCurve);
+
+    _focusNode = FocusNode(canRequestFocus: _isEnabled);
+    _effectiveFocusNode.canRequestFocus = _isEnabled;
+    if (widget.autofocus) {
+      _effectiveFocusNode.requestFocus();
     }
-    focusNode = FocusNode(canRequestFocus: isEnabled);
-    if (widget.autofocus) focusNode!.requestFocus();
-    _actions = {ActivateIntent: CallbackAction(onInvoke: (_) => _handleTap())};
-    _shortcuts = const {
+    _actions = <Type, Action<Intent>>{
+      ActivateIntent:
+          CallbackAction<Intent>(onInvoke: (final _) => _handleTap())
+    };
+    _shortcuts = const <ShortcutActivator, Intent>{
       SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
       SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
     };
   }
 
   @override
-  void didUpdateWidget(ArnaBaseWidget oldWidget) {
+  void didUpdateWidget(final ArnaBaseWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.onPressed != oldWidget.onPressed) {
-      focusNode!.canRequestFocus = isEnabled;
-      if (!isEnabled) _hover = _pressed = false;
+    if (widget.onPressed != oldWidget.onPressed ||
+        widget.onLongPress != oldWidget.onLongPress) {
+      if (!_isEnabled) {
+        _hover = _pressed = false;
+      }
+    }
+    _effectiveFocusNode.canRequestFocus = _isEnabled;
+    if (_pressed && mounted) {
+      if (widget.showAnimation) {
+        _controller.forward();
+      }
+      setState(() => _pressed = false);
     }
   }
 
   @override
   void dispose() {
-    focusNode!.dispose();
-    focusNode = null;
-    if (widget.showAnimation) _controller.dispose();
+    _focusNode!.dispose();
+    if (widget.showAnimation) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
-  void _handleFocusChange(bool hasFocus) {
+  void _handleFocusChange(final bool hasFocus) {
     setState(() {
       _focused = hasFocus;
-      if (!hasFocus) _pressed = false;
+      if (!hasFocus) {
+        _pressed = false;
+      }
     });
   }
 
   Future<void> _handleTap() async {
-    if (isEnabled) {
-      setState(() => _pressed = true);
-      widget.onPressed!();
-      if (widget.showAnimation) {
-        _controller.reverse().then((_) => _controller.forward());
+    if (_isEnabled) {
+      if (mounted) {
+        setState(() => _pressed = true);
       }
-      await Future.delayed(Styles.basicDuration);
-      if (mounted) setState(() => _pressed = false);
+      widget.onPressed?.call();
+      if (widget.showAnimation) {
+        _controller.reverse().then((final _) {
+          if (mounted) {
+            _controller.forward();
+          }
+        });
+      }
+      if (mounted) {
+        setState(() => _pressed = false);
+      }
     }
   }
 
-  void _handleTapDown(_) {
+  void _handleLongPress() {
+    if (_isEnabled) {
+      if (widget.enableFeedback) {
+        ArnaFeedback.forLongPress(context);
+      }
+      widget.onLongPress?.call();
+    }
+  }
+
+  void _handlePressDown(final _) {
     if (!_pressed && mounted) {
-      if (widget.showAnimation) _controller.reverse();
+      if (widget.showAnimation) {
+        _controller.reverse();
+      }
       setState(() => _pressed = true);
     }
   }
 
-  void _handleTapUp(_) {
+  void _handleTapUp(final _) {
     if (_pressed && mounted) {
-      if (widget.showAnimation) _controller.forward();
+      if (widget.showAnimation) {
+        _controller.forward();
+      }
       setState(() => _pressed = false);
     }
   }
 
-  void _handleTapCancel() {
-    if (mounted && widget.showAnimation) _controller.forward();
+  void _handleLongPressUp() {
+    if (_pressed && mounted) {
+      if (widget.showAnimation) {
+        _controller.forward();
+      }
+      setState(() => _pressed = false);
+    }
   }
 
-  void _handleHover(hover) {
-    if (hover != _hover && mounted) setState(() => _hover = hover);
+  void _handleHorizontalDragStart(final DragStartDetails dragStartDetails) {
+    widget.onHorizontalDragStart?.call(dragStartDetails);
+    _handlePressDown(null);
   }
 
-  void _handleFocus(focus) {
-    if (focus != _focused && mounted) setState(() => _focused = focus);
+  void _handleHorizontalDragEnd(final DragEndDetails dragEndDetails) {
+    widget.onHorizontalDragEnd?.call(dragEndDetails);
+    _handleTapUp(null);
+  }
+
+  void _handleVerticalDragStart(final DragStartDetails dragStartDetails) {
+    widget.onVerticalDragStart?.call(dragStartDetails);
+    _handlePressDown(null);
+  }
+
+  void _handleVerticalDragEnd(final DragEndDetails dragEndDetails) {
+    widget.onVerticalDragEnd?.call(dragEndDetails);
+    _handleTapUp(null);
+  }
+
+  void _handleHover(final bool hover) {
+    if (hover != _hover && mounted) {
+      setState(() => _hover = hover);
+    }
+  }
+
+  void _handleFocus(final bool focus) {
+    if (focus != _focused && mounted) {
+      setState(() => _focused = focus);
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
-    Widget child = widget.builder(
+  Widget build(final BuildContext context) {
+    final Widget child = widget.builder(
       context,
-      isEnabled,
+      _isEnabled,
       _hover,
       _focused,
       _pressed,
       _selected,
     );
-    if (widget.showAnimation) {
-      child = ScaleTransition(scale: _animation, child: child);
-    }
+
     return ArnaTooltip(
       message: widget.tooltipMessage,
       child: MergeSemantics(
         child: Semantics(
           label: widget.semanticLabel,
           button: true,
-          enabled: isEnabled,
-          focusable: isEnabled,
+          enabled: _isEnabled,
+          focusable: _isEnabled,
           focused: _focused,
           checked: _selected,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: _handleTap,
-            onTapDown: _handleTapDown,
-            onTapUp: _handleTapUp,
-            onTapCancel: _handleTapCancel,
-            onLongPress: _handleTap,
-            onLongPressStart: _handleTapDown,
-            onLongPressEnd: _handleTapUp,
-            onHorizontalDragStart: _handleTapDown,
-            onHorizontalDragEnd: _handleTapUp,
-            onVerticalDragStart: _handleTapDown,
-            onVerticalDragEnd: _handleTapUp,
+            onLongPress: _handleLongPress,
+            onLongPressDown: _handlePressDown,
+            onLongPressUp: _handleLongPressUp,
+            onHorizontalDragStart: _handleHorizontalDragStart,
+            onHorizontalDragEnd: _handleHorizontalDragEnd,
+            onVerticalDragStart: _handleVerticalDragStart,
+            onVerticalDragEnd: _handleVerticalDragEnd,
             child: FocusableActionDetector(
-              enabled: isEnabled && widget.isFocusable,
-              focusNode: focusNode,
-              autofocus: !isEnabled ? false : widget.autofocus,
+              enabled: _isEnabled && widget.isFocusable,
+              focusNode: _effectiveFocusNode,
+              autofocus: _isEnabled && widget.autofocus,
               mouseCursor: widget.cursor,
               onShowHoverHighlight: _handleHover,
               onShowFocusHighlight: _handleFocus,
               onFocusChange: _handleFocusChange,
               actions: _actions,
               shortcuts: _shortcuts,
-              child: child,
+              child: widget.showAnimation
+                  ? ScaleTransition(scale: _animation, child: child)
+                  : child,
             ),
           ),
         ),

@@ -1,7 +1,9 @@
 import 'package:arna/arna.dart';
 
+import '/strings.dart';
+
 class Typography extends StatelessWidget {
-  const Typography({Key? key}) : super(key: key);
+  const Typography({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,50 +11,57 @@ class Typography extends StatelessWidget {
       child: Padding(
         padding: Styles.normal,
         child: SizedBox(
-          width: deviceWidth(context),
+          width: ArnaHelpers.deviceWidth(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: Styles.normal,
                 child: Text(
-                  "Lorem ipsum dolor",
-                  style: ArnaTheme.of(context).textTheme.largeTitleTextStyle,
+                  Strings.lorem,
+                  style: ArnaTheme.of(context).textTheme.display,
                 ),
               ),
               Padding(
                 padding: Styles.normal,
                 child: Text(
-                  "Lorem ipsum dolor",
-                  style: ArnaTheme.of(context).textTheme.titleTextStyle,
+                  Strings.lorem,
+                  style: ArnaTheme.of(context).textTheme.headline,
                 ),
               ),
               Padding(
                 padding: Styles.normal,
                 child: Text(
-                  "Lorem ipsum dolor",
-                  style: ArnaTheme.of(context).textTheme.textStyle,
+                  Strings.lorem,
+                  style: ArnaTheme.of(context).textTheme.title,
                 ),
               ),
               Padding(
                 padding: Styles.normal,
                 child: Text(
-                  "Lorem ipsum dolor",
-                  style: ArnaTheme.of(context).textTheme.buttonTextStyle,
+                  Strings.lorem,
+                  style: ArnaTheme.of(context).textTheme.body,
                 ),
               ),
               Padding(
                 padding: Styles.normal,
                 child: Text(
-                  "Lorem ipsum dolor",
-                  style: ArnaTheme.of(context).textTheme.subtitleTextStyle,
+                  Strings.lorem,
+                  style: ArnaTheme.of(context).textTheme.button,
                 ),
               ),
               Padding(
                 padding: Styles.normal,
                 child: Text(
-                  "Lorem ipsum dolor",
-                  style: ArnaTheme.of(context).textTheme.captionTextStyle,
+                  Strings.lorem,
+                  style: ArnaTheme.of(context).textTheme.subtitle,
+                ),
+              ),
+              Padding(
+                padding: Styles.normal,
+                child: Text(
+                  Strings.lorem,
+                  style: ArnaTheme.of(context).textTheme.caption,
                 ),
               ),
             ],

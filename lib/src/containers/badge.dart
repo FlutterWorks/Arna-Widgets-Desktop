@@ -4,11 +4,10 @@ import 'package:arna/arna.dart';
 class ArnaBadge extends StatelessWidget {
   /// Creates a badge in the Arna style.
   const ArnaBadge({
-    Key? key,
+    super.key,
     required this.label,
     this.accentColor,
-    this.textColor = ArnaColors.white243,
-  }) : super(key: key);
+  });
 
   /// The text label of the badge.
   final String label;
@@ -16,44 +15,36 @@ class ArnaBadge extends StatelessWidget {
   /// The background color of the badge.
   final Color? accentColor;
 
-  /// The label color of the badge.
-  final Color textColor;
   @override
-  Widget build(BuildContext context) {
-    Color accent = accentColor ?? ArnaTheme.of(context).accentColor;
+  Widget build(final BuildContext context) {
+    final Color accent = accentColor ?? ArnaTheme.of(context).accentColor;
     return Padding(
       padding: Styles.small,
-      child: AnimatedContainer(
-        height: Styles.badgeSize,
-        duration: Styles.basicDuration,
-        curve: Styles.basicCurve,
-        decoration: BoxDecoration(
-          borderRadius: Styles.borderRadius,
-          border: Border.all(
-            color: ArnaDynamicColor.outerColor(
-              accent,
-              false,
-              ArnaTheme.brightnessOf(context),
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          shape: StadiumBorder(
+            side: BorderSide(
+              color: ArnaDynamicColor.outerColor(accent).withOpacity(0.28),
             ),
           ),
-          color: accent,
+          color: accent.withOpacity(0.28),
         ),
-        padding: Styles.horizontal,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Flexible(
-              child: Text(
-                label,
-                style: ArnaTheme.of(context).textTheme.textStyle.copyWith(
-                      color: ArnaDynamicColor.innerColor(
-                        accentColor ?? ArnaTheme.of(context).accentColor,
-                        ArnaTheme.brightnessOf(context),
+        child: Padding(
+          padding: Styles.tileTextPadding,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Flexible(
+                child: Text(
+                  label,
+                  style: ArnaTheme.of(context).textTheme.subtitle!.copyWith(
+                        color: ArnaDynamicColor.applyOverlay(accent),
                       ),
-                    ),
+                  maxLines: 1,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

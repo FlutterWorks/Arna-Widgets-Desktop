@@ -8,36 +8,38 @@ import 'package:flutter/services.dart' show LogicalKeyboardKey, RawKeyDownEvent;
 /// It builds upon a [WidgetsApp] by Arna specific defaulting such as fonts and
 /// scrolling physics.
 ///
-/// The [ArnaApp] configures the top-level [Navigator] to search for routes
-/// in the following order:
+/// The [ArnaApp] configures the top-level [Navigator] to search for routes in
+/// the following order:
 ///
 ///  1. For the `/` route, the [home] property, if non-null, is used.
 ///
-///  2. Otherwise, the [routes] table is used, if it has an entry for the route.
+///  2. Otherwise, the [routes] table is used, if it has an entry for the
+///     route.
 ///
 ///  3. Otherwise, [onGenerateRoute] is called, if provided. It should return a
-///     non-null value for any _valid_ route not handled by [home] and [routes].
+///     non-null value for any _valid_ route not handled by [home] and
+///     [routes].
 ///
 ///  4. Finally if all else fails [onUnknownRoute] is called.
 ///
-/// If [home], [routes], [onGenerateRoute], and [onUnknownRoute] are all null,
-/// and [builder] is not null, then no [Navigator] is created.
+/// If a [Navigator] is created, at least one of these options must handle the
+/// `/` route, since it is used when an invalid [initialRoute] is specified on
+/// startup (e.g. by another application launching this one with an intent on
+/// Android; see [dart:ui.PlatformDispatcher.defaultRouteName]).
 ///
 /// This widget also configures the observer of the top-level [Navigator] (if
 /// any) to perform [Hero] animations.
 ///
-/// The [ArnaApp] widget isn't a required ancestor for other Arna
-/// widgets, but many Arna widgets could depend on the [ArnaTheme]
-/// widget, which the [ArnaApp] composes.
-///
 /// {@tool snippet}
-/// This example shows how to create a [ArnaApp] that disables the "debug"
+/// This example shows how to create an [ArnaApp] that disables the "debug"
 /// banner with a [home] route that will be displayed when the app is launched.
 ///
 /// ```dart
 /// const ArnaApp(
 ///   home: ArnaScaffold(
-///     body: Container(),
+///     headerBar: ArnaHeaderBar(
+///       title: 'Home',
+///     ),
 ///   ),
 ///   debugShowCheckedModeBanner: false,
 /// )
@@ -45,20 +47,24 @@ import 'package:flutter/services.dart' show LogicalKeyboardKey, RawKeyDownEvent;
 /// {@end-tool}
 ///
 /// {@tool snippet}
-/// This example shows how to create a [ArnaApp] that uses the [routes]
-/// `Map` to define the "home" route and an "about" route.
+/// This example shows how to create an [ArnaApp] that uses the [routes] `Map`
+/// to define the "home" route and an "about" route.
 ///
 /// ```dart
 /// ArnaApp(
 ///   routes: <String, WidgetBuilder>{
 ///     '/': (BuildContext context) {
 ///       return const ArnaScaffold(
-///         body: Container(),
+///         headerBar: ArnaHeaderBar(
+///           title: 'Home Route',
+///         ),
 ///       );
 ///     },
 ///     '/about': (BuildContext context) {
 ///       return const ArnaScaffold(
-///         body: Container(),
+///         headerBar: ArnaHeaderBar(
+///           title: 'About Route',
+///         ),
 ///       );
 ///     }
 ///   },
@@ -67,7 +73,7 @@ import 'package:flutter/services.dart' show LogicalKeyboardKey, RawKeyDownEvent;
 /// {@end-tool}
 ///
 /// {@tool snippet}
-/// This example shows how to create a [ArnaApp] that defines a [theme] that
+/// This example shows how to create an [ArnaApp] that defines a [theme] that
 /// will be used for Arna widgets in the app.
 ///
 /// ```dart
@@ -76,7 +82,9 @@ import 'package:flutter/services.dart' show LogicalKeyboardKey, RawKeyDownEvent;
 ///     brightness: Brightness.dark,
 ///   ),
 ///   home: ArnaScaffold(
-///     body: Container(),
+///     headerBar: ArnaHeaderBar(
+///       title: 'ArnaApp Theme',
+///     ),
 ///   ),
 /// )
 /// ```
@@ -84,12 +92,18 @@ import 'package:flutter/services.dart' show LogicalKeyboardKey, RawKeyDownEvent;
 ///
 /// See also:
 ///
-///  * [ArnaScaffold], which provides a standard page layout.
+///
+///  * [ArnaScaffold], which provides standard app elements like an
+///    [ArnaHeaderBar] and an [ArnaDrawer].
 ///  * [Navigator], which is used to manage the app's stack of pages.
+///  * [ArnaPageRoute], which defines an app page that transitions in an
+///    arna-specific way.
 ///  * [WidgetsApp], which defines the basic app elements but does not depend
-///    on the Arna library.
+///    on the arna library.
+///  * The Flutter Internationalization Tutorial,
+///    <https://flutter.dev/tutorials/internationalization/>.
 class ArnaApp extends StatefulWidget {
-  /// Creates a ArnaApp.
+  /// Creates an ArnaApp.
   ///
   /// At least one of [home], [routes], [onGenerateRoute], or [builder] must be
   /// non-null. If only [routes] is given, it must include an entry for the
@@ -99,9 +113,10 @@ class ArnaApp extends StatefulWidget {
   ///
   /// This class creates an instance of [WidgetsApp].
   ///
-  /// The boolean arguments, [routes], and [navigatorObservers], must not be null.
+  /// The boolean arguments, [routes], and [navigatorObservers], must not be
+  /// null.
   const ArnaApp({
-    Key? key,
+    super.key,
     this.navigatorKey,
     this.home,
     this.theme,
@@ -135,14 +150,17 @@ class ArnaApp extends StatefulWidget {
         routeInformationParser = null,
         routerDelegate = null,
         backButtonDispatcher = null,
-        super(key: key);
+        routerConfig = null;
 
-  /// Creates a [ArnaApp] that uses the [Router] instead of a [Navigator].
+  /// Creates an [ArnaApp] that uses the [Router] instead of a [Navigator].
+  ///
+  /// {@macro flutter.widgets.WidgetsApp.router}
   const ArnaApp.router({
-    Key? key,
+    super.key,
     this.routeInformationProvider,
-    required RouteInformationParser<Object> this.routeInformationParser,
-    required RouterDelegate<Object> this.routerDelegate,
+    this.routeInformationParser,
+    this.routerDelegate,
+    this.routerConfig,
     this.backButtonDispatcher,
     this.theme,
     this.builder,
@@ -164,15 +182,15 @@ class ArnaApp extends StatefulWidget {
     this.restorationScopeId,
     this.scrollBehavior,
     this.useInheritedMediaQuery = false,
-  })  : navigatorObservers = null,
+  })  : assert(routerDelegate != null || routerConfig != null),
+        navigatorObservers = null,
         navigatorKey = null,
         onGenerateRoute = null,
         home = null,
         onGenerateInitialRoutes = null,
         onUnknownRoute = null,
         routes = null,
-        initialRoute = null,
-        super(key: key);
+        initialRoute = null;
 
   /// {@macro flutter.widgets.widgetsApp.navigatorKey}
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -185,9 +203,9 @@ class ArnaApp extends StatefulWidget {
 
   /// The application's top-level routing table.
   ///
-  /// When a named route is pushed with [Navigator.pushNamed], the route name is
-  /// looked up in this map. If the name is present, the associated
-  /// [widgets.WidgetBuilder] is used to construct a [ArnaPageRoute] that
+  /// When a named route is pushed with [Navigator.pushNamed], the route name
+  /// is looked up in this map. If the name is present, the associated
+  /// [widgets.WidgetBuilder] is used to construct an [ArnaPageRoute] that
   /// performs an appropriate transition, including [Hero] animations, to the
   /// new route.
   ///
@@ -221,7 +239,14 @@ class ArnaApp extends StatefulWidget {
   /// {@macro flutter.widgets.widgetsApp.backButtonDispatcher}
   final BackButtonDispatcher? backButtonDispatcher;
 
+  /// {@macro flutter.widgets.widgetsApp.routerConfig}
+  final RouterConfig<Object>? routerConfig;
+
   /// {@macro flutter.widgets.widgetsApp.builder}
+  ///
+  /// Arna specific features such as [showArnaDialog] and [showArnaMenu], and
+  /// widgets such as [ArnaTooltip], [ArnaPopupMenuButton], also require a
+  /// [Navigator] to properly function.
   final TransitionBuilder? builder;
 
   /// {@macro flutter.widgets.widgetsApp.title}
@@ -243,20 +268,20 @@ class ArnaApp extends StatefulWidget {
   /// {@macro flutter.widgets.widgetsApp.localizationsDelegates}
   ///
   /// Internationalized apps that require translations for one of the locales
-  /// listed in [GlobalMaterialLocalizations] should specify this parameter
-  /// and list the [supportedLocales] that the application can handle.
+  /// listed in [GlobalMaterialLocalizations] should specify this parameter and
+  /// list the [supportedLocales] that the application can handle.
   ///
   /// ```dart
   /// import 'package:flutter_localizations/flutter_localizations.dart';
   /// ArnaApp(
-  ///   localizationsDelegates: [
-  ///     // ... app-specific localization delegate[s] here
+  ///   localizationsDelegates: <LocalizationsDelegate<Object>>[
+  ///     // ... app-specific localization delegate(s) here
   ///     GlobalMaterialLocalizations.delegate,
   ///     GlobalWidgetsLocalizations.delegate,
   ///   ],
-  ///   supportedLocales: [
-  ///     const Locale('en', 'US'), // English
-  ///     const Locale('he', 'IL'), // Hebrew
+  ///   supportedLocales: <Locale>[
+  ///     Locale('en', 'US'), // English
+  ///     Locale('he', 'IL'), // Hebrew
   ///     // ... other locales the app supports
   ///   ],
   ///   // ...
@@ -265,8 +290,8 @@ class ArnaApp extends StatefulWidget {
   ///
   /// ## Adding localizations for a new locale
   ///
-  /// The information that follows applies to the unusual case of an app
-  /// adding translations for a language not already supported by
+  /// The information that follows applies to the unusual case of an app adding
+  /// translations for a language not already supported by
   /// [GlobalMaterialLocalizations].
   ///
   /// Delegates that produce [WidgetsLocalizations] and [MaterialLocalizations]
@@ -276,48 +301,56 @@ class ArnaApp extends StatefulWidget {
   /// [LocalizationsDelegate<MaterialLocalizations>] whose load methods return
   /// custom versions of [WidgetsLocalizations] or [MaterialLocalizations].
   ///
-  /// For example: to add support to [MaterialLocalizations] for a
-  /// locale it doesn't already support, say `const Locale('foo', 'BR')`,
-  /// one could just extend [DefaultMaterialLocalizations]:
+  /// For example: to add support to [MaterialLocalizations] for a locale it
+  /// doesn't already support, say `const Locale('foo', 'BR')`, one first
+  /// creates a subclass of [MaterialLocalizations] that provides the
+  /// translations:
   ///
   /// ```dart
-  /// class FooLocalizations extends DefaultMaterialLocalizations {
-  ///   FooLocalizations(Locale locale) : super(locale);
+  /// class FooLocalizations extends MaterialLocalizations {
+  ///   FooLocalizations();
   ///   @override
-  ///   String get okButtonLabel {
-  ///     if (locale == const Locale('foo', 'BR'))
-  ///       return 'foo';
-  ///     return super.okButtonLabel;
-  ///   }
+  ///   String get okButtonLabel => 'foo';
+  ///   // ...
+  ///   // lots of other getters and methods to override!
   /// }
   ///
   /// ```
   ///
-  /// A `FooLocalizationsDelegate` is essentially just a method that constructs
-  /// a `FooLocalizations` object. We return a [SynchronousFuture] here because
-  /// no asynchronous work takes place upon "loading" the localizations object.
+  /// One must then create a [LocalizationsDelegate] subclass that can provide
+  /// an instance of the [MaterialLocalizations] subclass. In this case, this is
+  /// essentially just a method that constructs a `FooLocalizations` object. A
+  /// [SynchronousFuture] is used here because no asynchronous work takes place
+  /// upon "loading" the localizations object.
   ///
   /// ```dart
-  /// class FooLocalizationsDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+  /// // continuing from previous example...
+  /// class FooLocalizationsDelegate
+  ///     extends LocalizationsDelegate<MaterialLocalizations> {}
   ///   const FooLocalizationsDelegate();
   ///   @override
+  ///   bool isSupported(Locale locale) {
+  ///     return locale == const Locale('foo', 'BR');
+  ///   }
+  ///   @override
   ///   Future<FooLocalizations> load(Locale locale) {
-  ///     return SynchronousFuture(FooLocalizations(locale));
+  ///     assert(locale == const Locale('foo', 'BR'));
+  ///     return SynchronousFuture<FooLocalizations>(FooLocalizations());
   ///   }
   ///   @override
   ///   bool shouldReload(FooLocalizationsDelegate old) => false;
   /// }
   /// ```
   ///
-  /// Constructing a [ArnaApp] with a `FooLocalizationsDelegate` overrides
-  /// the automatically included delegate for [MaterialLocalizations] because
-  /// only the first delegate of each [LocalizationsDelegate.type] is used and
-  /// the automatically included delegates are added to the end of the app's
+  /// Constructing an [ArnaApp] with a `FooLocalizationsDelegate` overrides the
+  /// automatically included delegate for [MaterialLocalizations] because only
+  /// the first delegate of each [LocalizationsDelegate.type] is used and the
+  /// automatically included delegates are added to the end of the app's
   /// [localizationsDelegates] list.
   ///
   /// ```dart
-  /// ArnaApp(
-  ///   localizationsDelegates: [
+  /// const ArnaApp(
+  ///   localizationsDelegates: <LocalizationsDelegate<Object>>[
   ///     const FooLocalizationsDelegate(),
   ///   ],
   ///   // ...
@@ -327,8 +360,8 @@ class ArnaApp extends StatefulWidget {
   ///
   ///  * [supportedLocales], which must be specified along with
   ///    [localizationsDelegates].
-  ///  * [GlobalMaterialLocalizations], a [localizationsDelegates] value
-  ///    which provides material localizations for many languages.
+  ///  * [GlobalMaterialLocalizations], a [localizationsDelegates] value which
+  ///    provides material localizations for many languages.
   ///  * The Flutter Internationalization Tutorial,
   ///    <https://flutter.dev/tutorials/internationalization/>.
   final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
@@ -351,8 +384,8 @@ class ArnaApp extends StatefulWidget {
   ///
   ///  * [localizationsDelegates], which must be specified for localized
   ///    applications.
-  ///  * [GlobalMaterialLocalizations], a [localizationsDelegates] value
-  ///    which provides material localizations for many languages.
+  ///  * [GlobalMaterialLocalizations], a [localizationsDelegates] value which
+  ///    provides material localizations for many languages.
   ///  * The Flutter Internationalization Tutorial,
   ///    <https://flutter.dev/tutorials/internationalization/>.
   final Iterable<Locale> supportedLocales;
@@ -361,7 +394,7 @@ class ArnaApp extends StatefulWidget {
   ///
   /// See also:
   ///
-  ///  * <https://flutter.dev/debugging/#performanceoverlay>
+  ///  * <https://flutter.dev/debugging/#performance-overlay>
   final bool showPerformanceOverlay;
 
   /// Turns on checkerboarding of raster cache images.
@@ -370,8 +403,8 @@ class ArnaApp extends StatefulWidget {
   /// Turns on checkerboarding of layers rendered to offscreen bitmaps.
   final bool checkerboardOffscreenLayers;
 
-  /// Turns on an overlay that shows the accessibility information
-  /// reported by the framework.
+  /// Turns on an overlay that shows the accessibility information reported by
+  /// the framework.
   final bool showSemanticsDebugger;
 
   /// {@macro flutter.widgets.widgetsApp.debugShowCheckedModeBanner}
@@ -392,7 +425,8 @@ class ArnaApp extends StatefulWidget {
   ///   return WidgetsApp(
   ///     shortcuts: <ShortcutActivator, Intent>{
   ///       ... WidgetsApp.defaultShortcuts,
-  ///       const SingleActivator(LogicalKeyboardKey.select): const ActivateIntent(),
+  ///       const SingleActivator(LogicalKeyboardKey.select):
+  ///           const ActivateIntent(),
   ///     },
   ///     color: const Color(0xFFFF0000),
   ///     builder: (BuildContext context, Widget? child) {
@@ -408,10 +442,10 @@ class ArnaApp extends StatefulWidget {
   /// {@macro flutter.widgets.widgetsApp.actions}
   /// {@tool snippet}
   /// This example shows how to add a single action handling an
-  /// [ActivateAction] to the default actions without needing to
-  /// add your own [Actions] widget.
+  /// [ActivateAction] to the default actions without needing to add your own
+  /// [Actions] widget.
   ///
-  /// Alternatively, you could insert a [Actions] widget with just the mapping
+  /// Alternatively, you could insert an [Actions] widget with just the mapping
   /// you want to add between the [WidgetsApp] and its child and get the same
   /// effect.
   ///
@@ -455,7 +489,7 @@ class ArnaApp extends StatefulWidget {
   final bool useInheritedMediaQuery;
 
   @override
-  _ArnaAppState createState() => _ArnaAppState();
+  State<ArnaApp> createState() => _ArnaAppState();
 
   /// The [HeroController] used for Arna page transitions.
   ///
@@ -467,57 +501,61 @@ class ArnaApp extends StatefulWidget {
 ///
 /// {@macro flutter.widgets.scrollBehavior}
 ///
-/// Setting a [ArnaScrollBehavior] will result in descendant [Scrollable] widgets
-/// using [BouncingScrollPhysics] by default. No [GlowingOverscrollIndicator] is
-/// applied when using a [ArnaScrollBehavior] either, regardless of platform.
-/// When executing on desktop platforms, a [ArnaScrollbar] is applied to the child.
+/// Setting an [ArnaScrollBehavior] will result in descendant [Scrollable]
+/// widgets.
+/// When executing on desktop platforms, an [ArnaScrollbar] is applied to the
+/// child.
 ///
 /// See also:
 ///
 ///  * [ScrollBehavior], the default scrolling behavior extended by this class.
 class ArnaScrollBehavior extends ScrollBehavior {
-  /// Creates a ArnaScrollBehavior that uses [BouncingScrollPhysics] and
-  /// adds [ArnaScrollbar]s on desktop platforms.
+  /// Creates an ArnaScrollBehavior that adds [ArnaScrollbar]s on desktop
+  /// platforms.
   const ArnaScrollBehavior();
 
   @override
-  Widget buildScrollbar(context, Widget child, ScrollableDetails details) {
-    // When modifying this function, consider modifying the implementation in
-    // the base class as well.
-    switch (getPlatform(context)) {
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        return ArnaScrollbar(controller: details.controller, child: child);
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.iOS:
+  Widget buildScrollbar(
+    final BuildContext context,
+    final Widget child,
+    final ScrollableDetails details,
+  ) {
+    switch (axisDirectionToAxis(details.direction)) {
+      case Axis.horizontal:
         return child;
+      case Axis.vertical:
+        switch (getPlatform(context)) {
+          case TargetPlatform.linux:
+          case TargetPlatform.macOS:
+          case TargetPlatform.windows:
+            return ArnaScrollbar(
+              controller: details.controller,
+              child: child,
+            );
+          case TargetPlatform.android:
+          case TargetPlatform.fuchsia:
+          case TargetPlatform.iOS:
+            return child;
+        }
     }
   }
 
   @override
   Widget buildOverscrollIndicator(
-    BuildContext context,
-    Widget child,
-    ScrollableDetails details,
+    final BuildContext context,
+    final Widget child,
+    final ScrollableDetails details,
   ) {
-    // No overscroll indicator.
-    // When modifying this function, consider modifying the implementation in
-    // the base class as well.
     return child;
-  }
-
-  @override
-  ScrollPhysics getScrollPhysics(BuildContext context) {
-    return const BouncingScrollPhysics();
   }
 }
 
+/// The [State] for an [ArnaApp].
 class _ArnaAppState extends State<ArnaApp> {
   late HeroController _heroController;
 
-  bool get _usesRouter => widget.routerDelegate != null;
+  bool get _usesRouter =>
+      widget.routerDelegate != null || widget.routerConfig != null;
 
   @override
   void initState() {
@@ -525,10 +563,10 @@ class _ArnaAppState extends State<ArnaApp> {
     _heroController = ArnaApp.createArnaHeroController();
   }
 
-  // Combine the Localizations for Material with the ones contributed
-  // by the localizationsDelegates parameter, if any. Only the first delegate
-  // of a particular LocalizationsDelegate.type is loaded so the
-  // localizationsDelegate parameter can be used to override
+  // Combine the Localizations for Material with the ones contributed by the
+  // localizationsDelegates parameter, if any.
+  // Only the first delegate of a particular LocalizationsDelegate.type is
+  // loaded so the localizationsDelegate parameter can be used to override
   // _MaterialLocalizationsDelegate.
   Iterable<LocalizationsDelegate<dynamic>> get _localizationsDelegates {
     return <LocalizationsDelegate<dynamic>>[
@@ -540,12 +578,71 @@ class _ArnaAppState extends State<ArnaApp> {
   }
 
   Widget _inspectorSelectButtonBuilder(
-    BuildContext context,
-    VoidCallback onPressed,
-  ) =>
-      ArnaIconButton(icon: Icons.search, onPressed: onPressed);
+    final BuildContext context,
+    final VoidCallback onPressed,
+  ) {
+    return ArnaButton(
+      icon: Icons.search,
+      onPressed: onPressed,
+      buttonType: ButtonType.pill,
+    );
+  }
 
-  WidgetsApp _buildWidgetApp(BuildContext context) {
+  ArnaThemeData _themeBuilder(final BuildContext context) {
+    final Brightness platformBrightness =
+        MediaQuery.platformBrightnessOf(context);
+
+    if (widget.theme == null) {
+      return platformBrightness == Brightness.dark
+          ? ArnaThemeData.dark().copyWith(accentColor: widget.color)
+          : ArnaThemeData.light().copyWith(accentColor: widget.color);
+    }
+
+    if (widget.theme!.brightness == null) {
+      return platformBrightness == Brightness.dark
+          ? ArnaThemeData.dark().copyWith(
+              accentColor: widget.theme!.accentColor,
+            )
+          : ArnaThemeData.light().copyWith(
+              accentColor: widget.theme!.accentColor,
+            );
+    }
+    return widget.theme!;
+  }
+
+  Widget _arnaBuilder(final BuildContext context, final Widget? child) {
+    final ArnaThemeData theme = _themeBuilder(context);
+    final Color effectiveSelectionColor = theme.accentColor.withOpacity(0.42);
+    final Color effectiveCursorColor = theme.accentColor;
+
+    return DefaultSelectionStyle(
+      selectionColor: effectiveSelectionColor,
+      cursorColor: effectiveCursorColor,
+      child: AnimatedArnaTheme(
+        data: theme,
+        child: widget.builder != null
+            ? Builder(
+                builder: (final BuildContext context) {
+                  // Why are we surrounding a builder with a builder?
+                  //
+                  // The widget.builder may contain code that invokes
+                  // ArnaTheme.of(), which should return the theme we selected
+                  // above in AnimatedArbaTheme. However, if we invoke
+                  // widget.builder() directly as the child of AnimatedArnaTheme
+                  // then there is no Context separating them, and the
+                  // widget.builder() will not find the theme. Therefore, we
+                  // surround widget.builder with yet another builder so that a
+                  // context separates them and ArnaTheme.of() correctly
+                  // resolves to the theme we passed to AnimatedArnaTheme.
+                  return widget.builder!(context, child);
+                },
+              )
+            : child ?? const SizedBox.shrink(),
+      ),
+    );
+  }
+
+  WidgetsApp _buildWidgetApp(final BuildContext context) {
     final ArnaThemeData effectiveThemeData = ArnaTheme.of(context);
     final Color color = ArnaDynamicColor.resolve(
       widget.color ?? effectiveThemeData.accentColor,
@@ -556,13 +653,14 @@ class _ArnaAppState extends State<ArnaApp> {
       return WidgetsApp.router(
         key: GlobalObjectKey(this),
         routeInformationProvider: widget.routeInformationProvider,
-        routeInformationParser: widget.routeInformationParser!,
-        routerDelegate: widget.routerDelegate!,
+        routeInformationParser: widget.routeInformationParser,
+        routerDelegate: widget.routerDelegate,
+        routerConfig: widget.routerConfig,
         backButtonDispatcher: widget.backButtonDispatcher,
-        builder: widget.builder,
+        builder: _arnaBuilder,
         title: widget.title,
         onGenerateTitle: widget.onGenerateTitle,
-        textStyle: effectiveThemeData.textTheme.textStyle,
+        textStyle: effectiveThemeData.textTheme.body,
         color: color,
         locale: widget.locale,
         localizationsDelegates: _localizationsDelegates,
@@ -581,11 +679,15 @@ class _ArnaAppState extends State<ArnaApp> {
         useInheritedMediaQuery: widget.useInheritedMediaQuery,
       );
     }
+
     return WidgetsApp(
       key: GlobalObjectKey(this),
       navigatorKey: widget.navigatorKey,
       navigatorObservers: widget.navigatorObservers!,
-      pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) {
+      pageRouteBuilder: <T>(
+        final RouteSettings settings,
+        final WidgetBuilder builder,
+      ) {
         return ArnaPageRoute<T>(settings: settings, builder: builder);
       },
       home: widget.home,
@@ -594,10 +696,10 @@ class _ArnaAppState extends State<ArnaApp> {
       onGenerateRoute: widget.onGenerateRoute,
       onGenerateInitialRoutes: widget.onGenerateInitialRoutes,
       onUnknownRoute: widget.onUnknownRoute,
-      builder: widget.builder,
+      builder: _arnaBuilder,
       title: widget.title,
       onGenerateTitle: widget.onGenerateTitle,
-      textStyle: effectiveThemeData.textTheme.textStyle,
+      textStyle: effectiveThemeData.textTheme.body,
       color: color,
       locale: widget.locale,
       localizationsDelegates: _localizationsDelegates,
@@ -618,27 +720,27 @@ class _ArnaAppState extends State<ArnaApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
+    Widget result = _buildWidgetApp(context);
+    result = Focus(
+      canRequestFocus: false,
+      onKey: (final FocusNode node, final RawKeyEvent event) {
+        if (event is! RawKeyDownEvent ||
+            event.logicalKey != LogicalKeyboardKey.escape) {
+          return KeyEventResult.ignored;
+        }
+        return ArnaTooltip.dismissAllToolTips()
+            ? KeyEventResult.handled
+            : KeyEventResult.ignored;
+      },
+      child: result,
+    );
+
     return ScrollConfiguration(
       behavior: widget.scrollBehavior ?? const ArnaScrollBehavior(),
-      child: ArnaTheme(
-        data: widget.theme ?? const ArnaThemeData(),
-        child: HeroControllerScope(
-          controller: _heroController,
-          child: Focus(
-            canRequestFocus: false,
-            onKey: (FocusNode node, RawKeyEvent event) {
-              if (event is! RawKeyDownEvent ||
-                  event.logicalKey != LogicalKeyboardKey.escape) {
-                return KeyEventResult.ignored;
-              }
-              return ArnaTooltip.dismissAllToolTips()
-                  ? KeyEventResult.handled
-                  : KeyEventResult.ignored;
-            },
-            child: _buildWidgetApp(context),
-          ),
-        ),
+      child: HeroControllerScope(
+        controller: _heroController,
+        child: result,
       ),
     );
   }

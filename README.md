@@ -1,60 +1,23 @@
-# Arna
+<img src="https://user-images.githubusercontent.com/16052180/169879175-298844aa-b75e-45b1-9006-1efb5d00baa9.png">
 
-Arna Framework - A unique set of widgets for building applications with Flutter.
-
-This Framework is in active development. Any contribution, idea, criticism or feedback is welcomed.
-
-<p align="start">
+<p align="center">
   <a href="https://pub.dartlang.org/packages/arna"><img src="https://img.shields.io/pub/v/arna.svg" alt="pub.dev"></a>
   <a href="https://github.com/MahanRahmati/"><img src="https://img.shields.io/badge/Maintainer-MahanRahmati-informational"></a>
-  <a href="https://github.com/leanflutter/awesome-flutter-desktop">
-   <img alt="Awesome Flutter Desktop" src="https://img.shields.io/badge/Awesome-Flutter%20Desktop-blue.svg" /></a>
+  <a href="https://github.com/leanflutter/awesome-flutter-desktop"> <img src="https://img.shields.io/badge/Awesome-Flutter%20Desktop-blue.svg" /></a>
+  <a href="https://github.com/MahanRahmati/Arna/actions/workflows/pana_analysis.yml"><img src="https://github.com/MahanRahmati/Arna/actions/workflows/pana_analysis.yml/badge.svg"></a>
+  <a href="https://github.com/MahanRahmati/Arna/actions/workflows/flutter_analysis.yml"><img src="https://github.com/MahanRahmati/Arna/actions/workflows/flutter_analysis.yml/badge.svg"></a>
   <img src="https://img.shields.io/github/license/MahanRahmati/arna">
 </p>
 
-<img alt="Light" src="https://user-images.githubusercontent.com/16052180/159135644-4b449c54-7dd5-44f1-a892-e7191f2cab99.png">
-<img alt="Dark" src="https://user-images.githubusercontent.com/16052180/159135635-bf3a17dd-ecbd-48c5-b3c6-5597c600e405.png">
+## Introduction
 
-## Content
+Arna is a set of widgets designed to be simple and easy to use for building applications with Flutter. These widgets are designed to be clean, minimal, and modern. Arna is inspired by the GNOME project.
 
-- [Arna](#arna)
-  - [Content](#content)
-  - [Getting Started](#getting-started)
-  - [Usage](#usage)
-    - [Arna App](#arna-app)
-    - [Arna Scaffold](#arna-scaffold)
-    - [Arna Side Scaffold](#arna-side-scaffold)
-    - [Arna Master Detail Scaffold](#arna-master-detail-scaffold)
-    - [Arna Button](#arna-button)
-    - [Arna Icon Button](#arna-icon-button)
-    - [Arna Text Button](#arna-text-button)
-    - [Arna Linked Buttons](#arna-linked-buttons)
-    - [Arna Popup Menu Button](#arna-popup-menu-button)
-    - [Arna Segmented Control](#arna-segmented-control)
-    - [Arna CheckBox](#arna-checkbox)
-    - [Arna CheckBox List Tile](#arna-checkbox-list-tile)
-    - [Arna Radio](#arna-radio)
-    - [Arna Radio List Tile](#arna-radio-list-tile)
-    - [Arna Switch](#arna-switch)
-    - [Arna Switch List Tile](#arna-switch-list-tile)
-    - [Arna List](#arna-list)
-    - [Arna Expansion Panel](#arna-expansion-panel)
-    - [Arna Card](#arna-card)
-    - [Arna Badge](#arna-badge)
-    - [Arna Dividers](#arna-dividers)
-    - [Arna Separators](#arna-separators)
-    - [Arna PopupDialog](#arna-popupdialog)
-    - [Arna Alert Dialog](#arna-alert-dialog)
-    - [Arna Text Field](#arna-text-field)
-    - [Arna Slider](#arna-slider)
-    - [Arna Slider List Tile](#arna-slider-list-tile)
-    - [Arna Tooltip](#arna-tooltip)
-    - [Arna Indicator](#arna-indicator)
-    - [Arna Search Field](#arna-search-field)
-    - [Arna Snack Bar](#arna-snack-bar)
-    - [Arna Banner](#arna-banner)
-  - [TODO](#todo)
-  - [Special thanks](#special-thanks)
+You can check the web version [here](https://mahanrahmati.github.io/arna_demo/).
+
+## Made with Arna
+
+- [Arna Translate](https://github.com/MahanRahmati/translate) - Alternative front-end for Google Translate.
 
 ## Getting Started
 
@@ -62,7 +25,7 @@ Add Arna as a dependency in your pubspec.yaml
 
 ```yaml
 dependencies:
-  arna: ^0.3.4
+  arna: ^1.0.6
 ```
 
 And import it
@@ -71,452 +34,106 @@ And import it
 import 'package:arna/arna.dart';
 ```
 
-## Usage
-
-### Arna App
-
-```dart
-ArnaApp(
-    debugShowCheckedModeBanner: false,
-    theme: ArnaThemeData(
-        accentColor: ArnaColors.accentColor,
-        brightness: Brightness.light,
-    ),
-    home: Home(),
-);
-```
-
-### Arna Scaffold
-
-```dart
-ArnaScaffold(
-    headerBarLeading: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-    title: "Title",
-    headerBarTrailing: ArnaIconButton(
-        icon: Icons.info_outlined,
-        onPressed: () {},
-    ),
-    body: Container(),
-);
-```
-
-### Arna Side Scaffold
-
-```dart
-ArnaSideScaffold(
-    headerBarLeading: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-    title: "Title",
-    headerBarTrailing: ArnaIconButton(
-        icon: Icons.info_outlined,
-        onPressed: () {},
-    ),
-    items: [
-        NavigationItem(
-          title: "Dummy",
-          icon: Icons.info_outlined,
-          builder: (_) => Container(),
-        ),
-        NavigationItem(
-          title: "Dummy",
-          icon: Icons.info_outlined,
-          builder: (_) => Container(),
-        ),
-    ],
-);
-```
-
-### Arna Master Detail Scaffold
-
-```dart
-ArnaMasterDetailScaffold(
-    headerBarLeading: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-    title: "Title",
-    headerBarTrailing: ArnaIconButton(
-        icon: Icons.info_outlined,
-        onPressed: () {},
-    ),
-    emptyBody : Container(),
-    items: [
-        MasterNavigationItem(
-          title: "Title 1",
-          subtitle: "Subtitle 1",
-          builder: (_) => Container(),
-        ),
-        MasterNavigationItem(
-          title: "Title 2",
-          subtitle: "Subtitle 2",
-          builder: (_) => Container(),
-        ),
-    ],
-);
-```
-
-### Arna Button
-
-```dart
-ArnaButton(
-    label: "Add",
-    icon: Icons.add_outlined,
-    onPressed: () {},
-);
-```
-
-### Arna Icon Button
-
-```dart
-ArnaIconButton(
-    icon: Icons.add_outlined,
-    onPressed: () {},
-    tooltipMessage: "Add",
-);
-```
-
-### Arna Text Button
-
-```dart
-ArnaTextButton(
-    label: "Add",
-    onPressed: () {},
-    tooltipMessage: "Add",
-);
-```
-
-### Arna Linked Buttons
-
-```dart
-ArnaLinkedButtons(
-    buttons: [
-        ArnaLinkedButton(
-            label: "Add",
-            icon: Icons.add_outlined,
-            onPressed: () {},
-            tooltipMessage: "Add",
-        ),
-        ArnaLinkedButton(
-            icon: Icons.add_outlined,
-            onPressed: () {},
-            tooltipMessage: "Add",
-        ),
-        ArnaLinkedButton(
-            label: "Add",
-            onPressed: () {},
-            tooltipMessage: "Add",
-        ),
-    ],
-);
-```
-
-### Arna Popup Menu Button
-
-```dart
-ArnaPopupMenuButton<String>(
-    itemBuilder: (context) => [
-        ArnaPopupMenuItem(
-            child: Text(
-                "First Item",
-                style: ArnaTheme.of(context).textTheme.textStyle,
-                ),
-                value: "First Item",
-            ),
-        const ArnaPopupMenuDivider(),
-        ArnaPopupMenuItem(
-            child: Text(
-                "Second Item",
-                style: ArnaTheme.of(context).textTheme.textStyle,
-                ),
-                value: "Second Item",
-            ),
-    ],
-    onSelected: (String value) => showArnaSnackbar(
-        context: context,
-        message: value,
-    ),
-);
-```
-
-### Arna Segmented Control
-
-```dart
-ArnaSegmentedControl(
-    groupValue: segmentedControlGroupValue,
-    children: {0: "Item 1", 1: "Item 2", 2: "Item 3"},
-    onValueChanged: (int i) => setState(() => segmentedControlGroupValue = i),
-);
-```
-
-### Arna CheckBox
-
-```dart
-ArnaCheckBox(
-    value: _throwShotAway,
-    onChanged: (bool? newValue) => setState(() => _throwShotAway = newValue!),
-);
-```
-
-### Arna CheckBox List Tile
-
-```dart
-ArnaCheckBoxListTile(
-    value: _throwShotAway,
-    title: "Title",
-    subtitle: "Subtitle",
-    onChanged: (bool? newValue) => setState(() => _throwShotAway = newValue!),
-    trailingButton: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-);
-```
-
-### Arna Radio
-
-```dart
-ArnaRadio<SingingCharacter>(
-    value: SingingCharacter.lafayette,
-    groupValue: _character,
-    onChanged: (SingingCharacter newValue) => setState(() => _character = newValue),
-);
-```
-
-### Arna Radio List Tile
-
-```dart
-ArnaRadioListTile<SingingCharacter>(
-    value: SingingCharacter.lafayette,
-    groupValue: _character,
-    title: "Title",
-    subtitle: "Subtitle",
-    onChanged: (SingingCharacter newValue) => setState(() => _character = newValue),
-    trailingButton: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-);
-```
-
-### Arna Switch
-
-```dart
-ArnaSwitch(
-    value: _giveVerse,
-    onChanged: (bool newValue) => setState(() => _giveVerse = newValue),
-);
-```
-
-### Arna Switch List Tile
-
-```dart
-ArnaSwitchListTile(
-    value: _giveVerse,
-    title: "Title",
-    subtitle: "Subtitle",
-    onChanged: (bool newValue) => setState(() => _giveVerse = newValue),
-    trailingButton: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-);
-```
-
-### Arna List
-
-```dart
-ArnaList(
-    title: "Title",
-    items: [
-        ArnaListTile(
-            title: "Title 1",
-            subtitle: "Subtitle 1",
-            trailing: ArnaBadge(title: "Badge 1"),
-            onTap: () {},
-        ),
-        ArnaListTile(
-            title: "Title 2",
-            subtitle: "Subtitle 2",
-            trailing: ArnaBadge(title: "Badge 2"),
-        ),
-    ],
-);
-```
-
-### Arna Expansion Panel
-
-```dart
-ArnaExpansionPanel(
-    title: "Title 1",
-    subtitle: "Subtitle 1",
-    child: Container(),
-);
-```
-
-### Arna Card
-
-```dart
-ArnaCard(
-    height: 200,
-    width: 200,
-    child: Container(),
-);
-```
-
-### Arna Badge
-
-```dart
-ArnaBadge(title: "Title");
-```
-
-### Arna Dividers
-
-```dart
-ArnaHorizontalDivider();
-ArnaVerticalDivider();
-```
-
-### Arna Separators
-
-```dart
-ArnaHorizontalSeparator();
-ArnaVerticalSeparator();
-```
-
-### Arna PopupDialog
-
-```dart
-ArnaIconButton(
-    icon: Icons.info_outlined,
-    onPressed: () => showArnaPopupDialog(
-        context: context,
-        title: "Title",
-        body: Container(),
-    ),
-);
-```
-
-### Arna Alert Dialog
-
-```dart
-ArnaIconButton(
-    icon: Icons.info_outlined,
-    onPressed: () => showArnaDialog(
-        context: context,
-        barrierDismissible: true,
-        dialog: ArnaAlertDialog(
-            title: "Title",
-            message: "Message",
-            primary: ArnaTextButton(
-                label: "OK",
-                onPressed: Navigator.of(context).pop,
-            ),
-        ),
-    ),
-);
-```
-
-### Arna Text Field
-
-```dart
-ArnaTextField(
-  obscureText: true,
-);
-```
-
-### Arna Slider
-
-```dart
-ArnaSlider(
-    value: _sliderValue,
-    min: 0,
-    max: 100,
-    onChanged: (double newValue) {
-        setState(() => _sliderValue = newValue);
-    },
-);
-```
-
-### Arna Slider List Tile
-
-```dart
-ArnaSliderListTile(
-    value: _sliderValue,
-    title: "Title",
-    subtitle: "Subtitle",
-    onChanged: (double newValue) {
-        setState(() => _sliderValue = newValue);
-    },
-    trailingButton: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-);
-```
-
-### Arna Tooltip
-
-```dart
-ArnaTooltip(
-    message: _sliderValue,
-    child: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-);
-```
-
-### Arna Indicator
-
-```dart
-ArnaIndicator(value: 0.35);
-```
-
-### Arna Search Field
-
-```dart
-ArnaSearchField(
-    showSearch: showSearch,
-    controller: controller,
-);
-```
-
-### Arna Snack Bar
-
-```dart
-showArnaSnackbar(
-    context: context,
-    message: "SnackBar Title",
-    trailing: ArnaIconButton(
-        icon: Icons.add_outlined,
-        onPressed: () {},
-    ),
-);
-```
-
-### Arna Banner
-
-```dart
-ArnaBanner(
-    showBanner: showBanner,
-    title: "This is an information banner!",
-    trailing: ArnaIconButton(
-        icon: Icons.close_outlined,
-        onPressed: () => setState(() => showBanner = false),
-    ),
-);
-```
-
-## TODO
-
-- Dropdown Button
-- Date and Time Pickers
-- Chip
+## Donation
+
+If you like Arna you can support developer with [monero](https://github.com/monero-project/monero). Thank you!
+
+![monero](.github/monero.png)
+
+`89nMEk2ZhypZDMkniyBiTsP1UrzMzEV9oNcAzdrxKo5HVuwB7kXA78iC9HaFLhdTBfHPzGrHL4ww9faGfvWFvxZo8kDkqcG`
+
+## Platform Support
+
+| Platform  | Android | iOS | Linux | MacOS | Web | Windows |
+| --------- | ------- | --- | ----- | ----- | --- | ------- |
+| Supported | ✅      | ✅  | ✅    | ✅    | ✅  | ✅      |
+
+## Feature roadmap
+
+See [ROADMAP](./ROADMAP.md).
+
+## Widgets
+
+| Arna                      | Material                      | Cupertino                             |
+| ------------------------- | ----------------------------- | ------------------------------------- |
+| ArnaApp                   | MaterialApp                   | CupertinoApp                          |
+| ArnaLogo                  | FlutterLogo                   | -                                     |
+| ArnaAvatar                | CircleAvatar                  | -                                     |
+| ArnaBanner                | MaterialBanner                | -                                     |
+| ArnaBaseWidget            | InkWell                       | -                                     |
+| ArnaBody                  | -                             | -                                     |
+| ArnaBottomBar             | NavigationBar                 | CupertinoTabBar                       |
+| ArnaBottomBarItem         | NavigationDestination         | -                                     |
+| ArnaDivider               | Divider                       | -                                     |
+| ArnaDrawer                | Drawer                        | -                                     |
+| ArnaHeaderBar             | AppBar                        | CupertinoNavigationBar                |
+| ArnaSliverHeaderBar       | SliverAppBar                  | CupertinoSliverNavigationBar          |
+| ArnaLicensePage           | LicensePage                   | -                                     |
+| ArnaMasterDetailScaffold  | -                             | -                                     |
+| ArnaMasterItem            | -                             | -                                     |
+| ArnaPageIndicator         | -                             | -                                     |
+| ArnaPage                  | MaterialPage                  | CupertinoPage                         |
+| ArnaProgressIndicator     | ProgressIndicator             | CupertinoActivityIndicator            |
+| ArnaPageRoute             | MaterialPageRoute             | CupertinoPageRoute                    |
+| ArnaScaffold              | Scaffold                      | CupertinoPageScaffold                 |
+| ArnaScrollbar             | Scrollbar                     | CupertinoScrollbar                    |
+| ArnaSearchField           | SearchPage                    | CupertinoSearchTextField              |
+| ArnaSelectableText        | SelectableText                | -                                     |
+| ArnaSideBarItem           | -                             | -                                     |
+| ArnaSideScaffold          | -                             | -                                     |
+| ArnaSnackBar              | SnackBar                      | -                                     |
+| ArnaTabItem               | Tab                           | -                                     |
+| ArnaTabView               | TabBarView                    | CupertinoTabScaffold                  |
+| ArnaTextSelectionControls | MaterialTextSelectionControls | CupertinoDesktopTextSelectionControls |
+| ArnaTooltip               | Tooltip                       | -                                     |
+| ArnaBackButton            | BackButton                    | -                                     |
+| ArnaBorderlessButton      | -                             | -                                     |
+| ArnaButton                | ElevatedButton                | CupertinoButton                       |
+| ArnaCloseButton           | CloseButton                   | -                                     |
+| ArnaColorButton           | -                             | -                                     |
+| ArnaIconButton            | IconButton                    | -                                     |
+| ArnaLinkedButtons         | -                             | -                                     |
+| ArnaTextButton            | TextButton                    | -                                     |
+| ArnaPillButton            | FloatingActionButton          | -                                     |
+| ArnaBadge                 | -                             | -                                     |
+| ArnaCard                  | Card                          | -                                     |
+| ArnaExpansionPanel        | ExpansionPanel                | -                                     |
+| ArnaGridTileBar           | GridTileBar                   | -                                     |
+| ArnaGridTile              | GridTile                      | -                                     |
+| ArnaList                  | -                             | -                                     |
+| ArnaListTile              | ListTile                      | -                                     |
+| ArnaReorderableList       | ReorderableListView           | -                                     |
+| ArnaAboutDialog           | AboutDialog                   | -                                     |
+| ArnaAlertDialog           | AlertDialog                   | CupertinoAlertDialog                  |
+| ArnaDialog                | Dialog                        | -                                     |
+| ArnaPopupDialog           | -                             | -                                     |
+| ArnaAutocomplete          | Autocomplete                  | -                                     |
+| ArnaCheckbox              | Checkbox                      | -                                     |
+| ArnaCheckboxListTile      | CheckboxListTile              | -                                     |
+| ArnaDropdownButton        | DropdownButton                | -                                     |
+| ArnaPopupMenu             | PopupMenu                     | CupertinoContextMenu                  |
+| ArnaRadio                 | Radio                         | -                                     |
+| ArnaRadioListTile         | RadioListTile                 | -                                     |
+| ArnaSegmentedControl      | Tab                           | CupertinoSegmentedControl             |
+| ArnaSlider                | Slider                        | CupertinoSlider                       |
+| ArnaSliderListTile        | -                             | -                                     |
+| ArnaSwitch                | Switch                        | CupertinoSwitch                       |
+| ArnaSwitchListTile        | SwitchListTile                | -                                     |
+| ArnaTextField             | TextField                     | CupertinoTextField                    |
+| ArnaTextFormField         | TextFormField                 | CupertinoTextFormFieldRow             |
+| ArnaDatePicker            | DatePicker                    | CupertinoDatePicker                   |
+
+## Contributing
+
+Arna is in active development. Any contribution, idea, criticism or feedback is welcomed.
+
+- If you know Flutter and Dart, we would love you to help us grow Arna more.
+- If you are a designer, we would love to see more mockups for Arna.
+- You can always file feature requests and bugs at the [issue tracker](https://github.com/MahanRahmati/Arna/issues).
+
+## License
+
+Arna is [BSD 3-Clause licensed](./LICENSE).
 
 ## Special thanks
 
@@ -529,3 +146,5 @@ ArnaBanner(
 - [rsms](https://github.com/rsms) for [inter](https://github.com/rsms/inter).
 - [WangYng](https://github.com/WangYng) for [better_cupertino_slider](https://github.com/WangYng/better_cupertino_slider).
 - [MingSern](https://github.com/MingSern) for [flutter_bounceable](https://github.com/MingSern/flutter_bounceable).
+- [jhyns](https://github.com/jhyns) for [one_ui](https://github.com/jhyns/one_ui)
+- [seel-channel](https://github.com/seel-channel) for [helpers](https://github.com/seel-channel/helpers)

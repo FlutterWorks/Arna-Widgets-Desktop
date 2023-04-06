@@ -1,21 +1,25 @@
 import 'package:arna/arna.dart';
 
+/// A navigation item used inside [ArnaMasterDetailScaffold].
 class ArnaMasterItem extends StatelessWidget {
-  /// Creates a master item.
+  /// Creates a navigation item.
   const ArnaMasterItem({
-    Key? key,
+    super.key,
     this.leading,
     this.title,
     this.subtitle,
     this.trailing,
     required this.onPressed,
-    this.selected = false,
+    this.onLongPressed,
+    this.itemSelected = false,
+    required this.index,
     this.isFocusable = true,
     this.autofocus = false,
     this.accentColor,
     this.cursor = MouseCursor.defer,
     this.semanticLabel,
-  }) : super(key: key);
+    this.enableFeedback = true,
+  });
 
   /// The leading widget of the item.
   final Widget? leading;
@@ -30,204 +34,145 @@ class ArnaMasterItem extends StatelessWidget {
   final Widget? trailing;
 
   /// The callback that is called when an item is tapped.
-  final VoidCallback? onPressed;
+  final Function(int index) onPressed;
+
+  /// The callback that is called when an item is long pressed.
+  final Function(int index)? onLongPressed;
 
   /// Whether this item is selected or not.
-  final bool selected;
+  final bool itemSelected;
+
+  /// The index of the item.
+  final int index;
 
   /// Whether this item is focusable or not.
   final bool isFocusable;
 
-  /// Whether this item should focus itself if nothing else is already
-  /// focused.
+  /// Whether this item should focus itself if nothing else is already focused.
   final bool autofocus;
 
   /// The color of the item's focused border.
   final Color? accentColor;
 
-  /// The cursor for a mouse pointer when it enters or is hovering over the
-  /// widget.
+  /// The cursor for a mouse pointer when it enters or is hovering over the widget.
   final MouseCursor cursor;
 
   /// The semantic label of the item.
   final String? semanticLabel;
 
-  Widget _buildChild(
-    BuildContext context,
-    bool enabled,
-    bool hovered,
-    Color accent,
-  ) {
-    final List<Widget> children = <Widget>[];
-    if (leading != null) {
-      children.add(
-        Padding(
-          padding: Styles.normal,
-          child: IconTheme.merge(
-            data: IconThemeData(
-              color: ArnaDynamicColor.resolve(
-                !enabled
-                    ? ArnaColors.disabledColor
-                    : selected
-                        ? ArnaDynamicColor.matchingColor(
-                            hovered
-                                ? ArnaDynamicColor.blend(
-                                    ArnaDynamicColor.resolve(
-                                      ArnaColors.buttonColor,
-                                      context,
-                                    ),
-                                    14,
-                                  )
-                                : ArnaDynamicColor.resolve(
-                                    ArnaColors.sideColor,
-                                    context,
-                                  ),
-                            accent,
-                            ArnaTheme.brightnessOf(context),
-                          )
-                        : ArnaColors.iconColor,
-                context,
-              ),
-            ),
-            child: leading!,
-          ),
-        ),
-      );
-    }
-    children.add(
-      Flexible(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (title != null)
-              SizedBox(
-                width: Styles.sideBarWidth,
-                child: Padding(
-                  padding: Styles.tileTextPadding,
-                  child: Text(
-                    title!,
-                    style: ArnaTheme.of(context).textTheme.textStyle,
-                  ),
-                ),
-              ),
-            if (subtitle != null)
-              Padding(
-                padding: Styles.tileTextPadding,
-                child: Text(
-                  subtitle!,
-                  style: ArnaTheme.of(context).textTheme.subtitleTextStyle,
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-    if (trailing != null) {
-      children.add(Padding(padding: Styles.normal, child: trailing));
-    }
-    return Row(children: children);
-  }
+  /// Whether detected gestures should provide acoustic and/or haptic feedback.
+  ///
+  /// For example, on Android a long-press will produce a short vibration, when feedback is enabled.
+  ///
+  /// See also:
+  ///
+  ///  * [ArnaFeedback] for providing platform-specific feedback to certain actions.
+  final bool enableFeedback;
 
   @override
-  Widget build(BuildContext context) {
-    Color accent = accentColor ?? ArnaTheme.of(context).accentColor;
-    bool buttonSelected = selected;
+  Widget build(final BuildContext context) {
+    final Color buttonColor = ArnaColors.buttonColor.resolveFrom(context);
+    final Color accent = accentColor ?? ArnaTheme.of(context).accentColor;
     return Padding(
       padding: Styles.small,
       child: ArnaBaseWidget(
-        builder: (context, enabled, hover, focused, pressed, selected) {
-          selected = buttonSelected;
-          return Stack(
-            alignment: Alignment.centerLeft,
-            children: <Widget>[
-              AnimatedContainer(
-                constraints: const BoxConstraints(
-                  minHeight: Styles.masterItemMinHeight,
-                ),
-                width: double.infinity,
-                duration: Styles.basicDuration,
-                curve: Styles.basicCurve,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: Styles.borderRadius,
-                  border: Border.all(
-                    color: !enabled
-                        ? ArnaColors.transparent
-                        : focused
-                            ? accent
-                            : ArnaDynamicColor.resolve(
-                                ArnaColors.borderColor,
-                                context,
-                              ),
-                  ),
-                  color: !enabled
-                      ? ArnaColors.transparent
-                      : ArnaDynamicColor.resolve(
-                          pressed
-                              ? ArnaDynamicColor.blend(
-                                  ArnaDynamicColor.resolve(
-                                    ArnaColors.buttonColor,
-                                    context,
-                                  ),
-                                  14,
-                                )
+        builder: (
+          final BuildContext context,
+          final bool enabled,
+          final bool hover,
+          final bool focused,
+          final bool pressed,
+          bool selected,
+        ) {
+          selected = itemSelected;
+          return AnimatedContainer(
+            constraints: const BoxConstraints(
+              minHeight: Styles.masterItemMinHeight,
+            ),
+            width: double.infinity,
+            duration: Styles.basicDuration,
+            curve: Styles.basicCurve,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: Styles.borderRadius,
+              border: Border.all(
+                color: !enabled
+                    ? ArnaColors.transparent
+                    : focused
+                        ? accent
+                        : ArnaColors.borderColor.resolveFrom(context),
+              ),
+              color: !enabled
+                  ? ArnaColors.transparent
+                  : pressed || selected || hover
+                      ? ArnaDynamicColor.applyOverlay(buttonColor)
+                      : buttonColor,
+            ),
+            padding: Styles.listTilePadding,
+            child: Row(
+              children: <Widget>[
+                if (leading != null)
+                  Padding(
+                    padding: Styles.normal,
+                    child: IconTheme.merge(
+                      data: IconThemeData(
+                        color: ArnaDynamicColor.resolve(
+                          !enabled
+                              ? ArnaColors.disabledColor
                               : selected
-                                  ? ArnaDynamicColor.blend(
-                                      ArnaDynamicColor.resolve(
-                                        ArnaColors.buttonColor,
-                                        context,
-                                      ),
-                                      14,
+                                  ? ArnaDynamicColor.matchingColor(
+                                      accent,
+                                      ArnaTheme.brightnessOf(context),
                                     )
-                                  : hover
-                                      ? ArnaDynamicColor.blend(
-                                          ArnaDynamicColor.resolve(
-                                            ArnaColors.buttonColor,
-                                            context,
-                                          ),
-                                          14,
-                                        )
-                                      : ArnaColors.buttonColor,
+                                  : ArnaColors.iconColor,
                           context,
                         ),
-                ),
-                padding: Styles.tilePadding,
-                child: _buildChild(context, enabled, hover, accent),
-              ),
-              AnimatedContainer(
-                height: selected ? Styles.iconSize : 0,
-                width: Styles.smallPadding,
-                duration: Styles.basicDuration,
-                curve: Styles.basicCurve,
-                decoration: BoxDecoration(
-                  borderRadius: Styles.borderRadius,
-                  color: ArnaDynamicColor.matchingColor(
-                    hover
-                        ? ArnaDynamicColor.blend(
-                            ArnaDynamicColor.resolve(
-                              ArnaColors.buttonColor,
-                              context,
+                      ),
+                      child: leading!,
+                    ),
+                  ),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      if (title != null)
+                        SizedBox(
+                          width: Styles.sideBarWidth,
+                          child: Padding(
+                            padding: Styles.tileTextPadding,
+                            child: Text(
+                              title!,
+                              style: ArnaTheme.of(context).textTheme.button,
                             ),
-                            14,
-                          )
-                        : ArnaDynamicColor.resolve(
-                            ArnaColors.sideColor,
-                            context,
                           ),
-                    accent,
-                    ArnaTheme.brightnessOf(context),
+                        ),
+                      if (subtitle != null)
+                        Padding(
+                          padding: Styles.tileTextPadding,
+                          child: Text(
+                            subtitle!,
+                            style: ArnaTheme.of(context).textTheme.subtitle,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                if (trailing != null)
+                  Padding(
+                    padding: Styles.normal,
+                    child: trailing,
+                  ),
+              ],
+            ),
           );
         },
-        onPressed: onPressed,
-        tooltipMessage: title,
+        onPressed: () => onPressed(index),
+        onLongPress: onLongPressed != null ? () => onLongPressed!(index) : null,
         isFocusable: isFocusable,
         autofocus: autofocus,
         cursor: cursor,
         semanticLabel: semanticLabel,
+        enableFeedback: enableFeedback,
       ),
     );
   }

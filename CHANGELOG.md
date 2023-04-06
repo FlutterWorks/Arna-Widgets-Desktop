@@ -1,10 +1,479 @@
+## 1.0.7
+
+- Update ArnaListTile
+- Update ArnaCard
+- Update ArnaSearchField
+- Add ArnaState
+- Add ArnaStateMixin
+- Update ArnaApp
+- [BREAKING] Update ArnaBody
+- Update ArnaHeaderBar
+- Update ArnaScaffold
+- [BREAKING] Remove ArnaTextSelectionControls
+- Add ArnaMagnifier
+- Add ArnaTextMagnifier
+- Add test for ArnaApp
+- Add test for ArnaScaffold
+- Move animations out of Arna
+- [BREAKING] Replace ArnaBottomBar with ArnaNavigationBar
+- [BREAKING] Replace ArnaBottomBarItem with ArnaNavigationBarItem
+- Add test for ArnaNavigationBar
+
+## 1.0.6
+
+- Update ROADMAP
+- Update ArnaTextField
+- Update ArnaSelectableText
+- Update ArnaHelpers
+- Add ArnaEdgeInsets
+- Add ArnaDeviceOrientation
+- Add ArnaStringExtension
+- Update ArnaListTile
+- Update ArnaBanner
+- Update ArnaExpansionPanel
+- Update ArnaCheckboxListTile
+- Update ArnaRadioListTile
+- Update ArnaSliderListTile
+- Update ArnaSwitchListTile
+- [BREAKING] Update ArnaPopupMenu
+- Update ArnaExpansionPanel
+- Add ArnaSliverHeaderBar
+- [BREAKING] Update ArnaHeaderBar
+- Update ArnaButton
+- Update ArnaBackButton
+- Update ArnaCloseButton
+- Update ArnaColorButton
+- Update ArnaLinkedButtons
+- [BREAKING] Remove ArnaBorderlessButton
+- [BREAKING] Remove ArnaIconButton
+- [BREAKING] Remove ArnaPillButton
+- [BREAKING] Remove ArnaTextButton
+- [BREAKING] Update ArnaScaffold
+- [BREAKING] Update ArnaPopupDialog
+- Add ArnaHeaderBarButton
+- Add ArnaHeaderBarDivider
+- Add ArnaHeaderBarItem
+- Add OverflowHandler
+- [Example] Update Home
+- Add ArnaSlideTransition
+- Add ArnaFadeTransition
+- Update ArnaDivider
+- Update ArnaTabView
+- Update ArnaTabItem
+- Update ArnaBanner
+
+## 1.0.5
+
+- Update README
+- Fix ArnaBottomBarItem
+- Refactor ArnaTextSelectionControls
+- Update ArnaTextFormField
+- Update ArnaTooltip
+- [BREAKING] Refactor Helpers
+- Update ArnaTextField
+- Update ArnaSelectableText
+- Update ArnaSearchField
+- Update ArnaSelectableText
+- Update ArnaAboutDialog
+- [BREAKING] Remove blur
+- Update ArnaSideScaffold
+- Update ArnaSideBarItem
+- Update ArnaTextField
+- Update ArnaSelectableText
+- Update ArnaPopupMenu
+- Use resolveFrom in widgets
+- Change dart.lineLength to 80
+
+## 1.0.4+1
+
+- Update ArnaBaseWidget
+
+## 1.0.4
+
+- Update README
+- Update ROADMAP
+- Update ArnaHeaderBar
+- Update ArnaScaffold
+- Update ArnaSideScaffold
+- Update ArnaMasterDetailScaffold
+- Update ArnaPopupDialog
+- Update ArnaSearchField
+- [Example] Update Example
+- Update ArnaRouteTransitionMixin
+- Update ArnaApp
+- Update ArnaLogo
+- Update ArnaAvatar
+- Update ArnaBaseWidget
+- Update ArnaBorderlessButton
+- Update ArnaButton
+- Update ArnaColorButton
+- Update ArnaLinkedButtons
+- Update ArnaPillButton
+- Add ArnaPageIndicator
+
+## 1.0.3
+
+- Update README
+- Update ROADMAP
+- Update analysis_options
+- Update ArnaSlider
+- Add ArnaLinkButton
+- [Example] Update Example
+- Update ArnaSideScaffold
+- Update ArnaReorderableList
+- Update ArnaTypography
+- Update ArnaBaseWidget
+- Add Clipboard support to Arna
+- Update ArnaCard
+- Update ArnaScaffold
+- Update ArnaMasterDetailScaffold
+- Update ArnaPopupDialog
+- Add ArnaBody
+- Update ArnaColors
+- Update ArnaBadge
+- Add ArnaTabView
+- Add ArnaTabItem
+- Update ArnaBottomBarItem
+- Update ArnaSideBarItem
+- Add ArnaPillButton
+- Update ArnaTextSelectionControls
+- Update ArnaTextField
+- Add ArnaSelectableText
+- Add ArnaPageTransitionSwitcher
+- Add ArnaFadeThroughTransition
+- [BREAKING] Update ArnaTypography
+- [BREAKING] Remove ArnaLinkButton
+
+## 1.0.2
+
+- Update Description
+- Update ROADMAP
+- Update ArnaDialog
+- Update ArnaPopupMenu
+- Update ArnaSlider
+- Update ArnaTextFormField
+- Update ArnaReorderableList
+- Update ArnaPopupMenuDivider
+- Update ArnaPopupMenuButton
+- Update ArnaColorButton
+- Add ArnaAboutDialog
+- Update ArnaAlertDialog
+- Update ArnaDatePicker
+- Add ArnaGridTile
+- Add ArnaGridTileBar
+- Add ArnaDropdownButton
+
+## 1.0.1
+
+- [Example] Update Example
+- Add Arna icons
+
+## 1.0.0
+
+- Update README
+- Update ROADMAP
+- [Example] Update Example
+- Update ArnaListTile
+- Update ArnaSearchField
+- Update ArnaBottomBar
+- Update ArnaDrawer
+- Update ArnaHeaderBar
+- Update ArnaMasterDetailScaffold
+- Update ArnaSideScaffold
+- Update ArnaExpansionPanel
+- Add ArnaLogo
+- Update ArnaThemeData
+- Add ArnaLicensePage
+- Add ArnaAutocomplete
+- Add ArnaAvatar
+- Add ArnaReorderableList
+
+## 0.4.9
+
+- Update ROADMAP
+- Update documentations
+- Update ArnaCard
+- Update ArnaDialog
+- Update ArnaPopupDialog
+- Update ArnaPopupMenu
+- Add ArnaBackButton
+- Update ArnaListTile
+- Add ArnaCloseButton
+- Update ArnaTooltip
+- Update ArnaMasterItem
+- [Example] Refactor Example
+- Update ArnaDateUtils
+- Update ArnaMasterDetailScaffold
+- Update ArnaPage
+- Update ArnaProgressIndicator
+- Update ArnaSearchField
+- Update ArnaScrollbar
+- Update ArnaSnackBar
+- Update ArnaTextSelectionControls
+- Update ArnaBorderlessButton
+- Update Helpers
+- Update ArnaCheckboxListTile
+- Update ArnaRadioListTile
+- Update ArnaSliderListTile
+- Update ArnaSwitchListTile
+- Update ArnaSlider
+- Update ArnaTextFormField
+- Update ArnaDatePicker
+- Update ArnaColors
+- Update ArnaTheme
+- Update ArnaTypography
+
+## 0.4.8
+
+- Update README
+- Update ArnaBaseWidget
+- Update ArnaPopupDialog
+- Update ArnaDatePicker
+- Add blur to ArnaDialog
+- Add blur to ArnaPopupDialog
+- Add blur to ArnaDrawer
+- Update MasterNavigationItem
+- Update NavigationItem
+- Update ArnaMasterDetailScaffold
+- Update ArnaTooltip
+- Update ArnaBorderlessButton
+- Update ArnaButton
+- Update ArnaIconButton
+- Update ArnaLinkedButtons
+- Update ArnaTextButton
+- Update ArnaListTile
+- Update ArnaPopupMenuButton
+- [Example] Update Example
+
+## 0.4.7
+
+- Update ROADMAP
+- Update ArnaFeedback
+- Update ArnaBaseWidget
+- Add ArnaDateUtils
+- Add ArnaDatePicker
+- [Example] Update Example
+
+## 0.4.6
+
+- Update ROADMAP
+- [BREAKING] Update ArnaDialog
+- [Example] Update Example
+- [BREAKING] Update ArnaPopupDialog
+- Update ArnaPageRoute
+- [BREAKING] Update ArnaCheckBoxListTile and Rename to ArnaCheckboxListTile
+- [BREAKING] Update ArnaCheckBox and Rename to ArnaCheckbox
+- Update ArnaPopupMenu
+- Update Styles
+- Update ArnaRadioListTile
+- Update ArnaRadio
+- Update ArnaSegmentedControl
+- Update ArnaSliderListTile
+- Update ArnaSlider
+- Update ArnaSwitchListTile
+- Update ArnaSwitch
+- Update ArnaTextField
+- Add ArnaTextFormField
+- Add ArnaTextSelectionControls
+- Update ArnaThemeData
+- Update ArnaTheme
+
+## 0.4.5
+
+- Update analysis_options
+- Update ArnaApp
+- Update ArnaSnackBar
+- Update ArnaTextField
+- Revert and Update ArnaColorButton
+- [Example] Update Example
+- Update ArnaLinkedButtons
+- Update ArnaSegmentedControl
+- Move ArnaPopupMenuButton to popup_menu.dart
+- Update ArnaPageRoute
+- Update ArnaBadge
+- [BREAKING] Remove ArnaColumn
+- Move ArnaDivider to base
+- Update ArnaExpansionPanel
+- Update ArnaListTile
+- [BREAKING] Update ArnaList
+
+## 0.4.4+1
+
+- Update pubspec
+- [Example] Update settings page
+- [Example] Update main page
+
+## 0.4.4
+
+- Update ROADMAP
+- Update README
+- Update ArnaDrawer
+- Update ArnaHeaderBar
+- Update ArnaSideScaffold
+- Update ArnaApp
+- [Example] Update widgets
+- Add ArnaFeedback
+- Update ArnaTooltip
+- Update ArnaButton
+- Update ArnaBaseWidget
+- Update ArnaIconButton
+- Update ArnaTextButton
+- Update ArnaBorderlessButton
+- Update ArnaLinkedButtons
+- Rename indicator to progress_indicator
+- Update ArnaProgressIndicator
+- Update ArnaMasterDetailScaffold
+- Add ArnaPage
+- Update ArnaScaffold
+- Update ArnaScrollbar
+- Update ArnaSearchField
+- Update ArnaMasterItem
+- Update ArnaSideBarItem
+- Add ArnaBottomBar
+- Add ArnaBottomBarItem
+- Add ArnaDivider
+- [BREAKING] Remove ArnaHorizontalDivider
+- [BREAKING] Remove ArnaVerticalDivider
+- [BREAKING] Remove ArnaHorizontalSeparator
+- [BREAKING] Remove ArnaVerticalSeparator
+- Update ArnaTextField
+- [Example] Update settings page
+- [Example] Update main page
+
+## 0.4.3
+
+- Change dart.lineLength to 120
+- Update ROADMAP.md
+- Update ArnaSideScaffold
+- [BREAKING] Revert and Update ArnaBanner
+- [BREAKING] Revert and Update ArnaSnackBar
+- [BREAKING] Revert and Update ArnaScaffold
+- Update ArnaTooltip
+
+## 0.4.2
+
+- Update ROADMAP.md
+- Update ArnaColorButton
+- Update ArnaMasterItem
+- Update ArnaColors
+- Update ArnaList
+- Update basicDuration
+- Refactor ArnaMasterDetailScaffold
+- Update ArnaMasterItem
+- Update ArnaButton
+- Update ArnaLinkedButtons
+- Update ArnaSegmentedControl
+
+## 0.4.1
+
+- Update ROADMAP.md
+- Update ArnaRadio
+- Update ArnaSwitch
+- Update ArnaColorButton
+- Update ArnaLinkedButtons
+- Update ArnaPopupMenuButton
+- Update ArnaApp
+- Update ArnaBanner
+- Update ArnaScaffold
+- Update ArnaSnackBar
+
+## 0.4.0
+
+- Add ArnaBorderlessButton
+- Update styles
+- Update helpers
+- Update ArnaTheme
+- Update ArnaSearchField
+- Update ArnaTextTheme
+- Update ArnaDynamicColor
+- Update ROADMAP.md
+
+## 0.3.9
+
+- Update ROADMAP.md
+- Update ArnaRadioListTile
+- Update ArnaSliderListTile
+- Update ArnaSwitchListTile
+- Update ArnaExpansionPanel
+- Update ArnaListTile
+- Update Styles and helpers
+- Update ArnaColorButton
+- Update ArnaButton
+- Update ArnaTheme
+- Add ArnaTypography
+- Refactor ArnaThemeData
+- [BREAKING] Refactor ArnaTextTheme
+- [BREAKING] Refactor ArnaButton
+- [BREAKING] Refactor ArnaIconButton
+- [BREAKING] Refactor ArnaTextButton
+- Remove ArnaIconThemeData
+- Update ArnaProgressIndicator
+- Update ArnaScrollbar
+- Update ArnaApp
+- Update ArnaDynamicColor
+
+## 0.3.8
+
+- Update ArnaIconButton
+- Update ArnaTextButton
+- Update ArnaBadge
+- Add Brightness to exports
+- Update ArnaCard
+- Update ArnaColumn
+- [BREAKING] Remove ArnaGroupedView
+- [BREAKING] Update ArnaList
+- Update ArnaListTile
+- Update ArnaHorizontalSeparator
+- Update ArnaVerticalSeparator
+- Update ArnaExpansionPanel
+- Update ArnaCheckBoxListTile
+- Update ArnaCheckBox
+
+## 0.3.7+1
+
+- Fix ArnaSearchField
+
+## 0.3.7
+
+- Update ArnaProgressIndicator
+- Update ArnaPageRoute
+- Update ArnaSearchField
+- Update ArnaBanner
+- [BREAKING] Update ArnaTextField
+
+## 0.3.6
+
+- Update ArnaSlider
+- Update ArnaAlertDialog
+- Update ArnaPopupDialog
+- Update ArnaColumn
+- Update ArnaGroupedView
+- [BREAKING] Update ArnaBanner
+- Update ArnaBaseWidget
+- Update ArnaDrawer
+- [BREAKING] Update ArnaHeaderBar and rename trailing to actions
+- [BREAKING] Remove ArnaBottomBarItem
+- [BREAKING] Remove ArnaBottomBar
+- Fix CHANGELOG
+- Add ROADMAP.md
+
 ## 0.3.5
 
+- Add ArnaSearchField to ArnaMasterDetailScaffold
 - Update ArnaExpansionPanel
 - Update ArnaList
 - Fix ArnaButton
 - Fix ArnaTextField
+- Fix ArnaBaseWidget
+- Add ArnaColorButton
+- Update some tooltipMessages
+- Update ArnaSlider
+- Update ArnaTextField
+- [BREAKING] Update ArnaSearchField and rename hint to placeholder
 - [BREAKING] Remove ArnaRow
+- [BREAKING] Rename compact to isCompact
+- [BREAKING] Rename medium to isMedium
+- [BREAKING] Rename expanded to isExpanded
 - Add more types
 
 ## 0.3.4
@@ -59,7 +528,7 @@
 - Fixing border in checkbox and radio [Thanks to @h1376h]
 - Update gitignore [Thanks to @h1376h]
 - Fixing switch colors [Thanks to @h1376h]
-- Fix side bar item color [Thanks to @h1376h]
+- Fix sidebar item color [Thanks to @h1376h]
 - Adding borderless button [Thanks to @h1376h]
 - Fix badge inner color [Thanks to @h1376h]
 - [Example] Update Widgets page
@@ -92,7 +561,7 @@
 - Update ArnaTextButton
 - [Example] Update Widgets page
 - [Example] Update main page
-- Update Readme
+- Update README
 
 ## 0.2.8
 
@@ -133,7 +602,7 @@
 - Add documentation to ArnaSlider
 - Refactor ArnaTooltip
 - Add ArnaSliderListTile
-- Update Readme
+- Update README
 
 ## 0.2.6
 
@@ -146,7 +615,7 @@
 - Update ArnaSnackBar
 - Update ArnaBadge
 - Update ArnaPopupDialog
-- Update Readme
+- Update README
 
 ## 0.2.5
 
@@ -171,7 +640,7 @@
 - Fix ArnaAlertDialog
 - Fix ArnaPopupDialo
 - Fix ArnaProgressIndicator
-- Update Readme
+- Update README
 
 ## 0.2.2
 
@@ -237,7 +706,7 @@
 ## 0.1.7
 
 - Cleanup colors
-- Update Readme
+- Update README
 
 ## 0.1.6
 
@@ -250,7 +719,7 @@
 - Add documentation to ArnaExpansionPanel
 - Cleanup more colors
 - Cleanup helpers
-- Fix Changelog
+- Fix CHANGELOG
 
 ## 0.1.5
 
@@ -297,7 +766,7 @@
 - Refactor ArnaDrawer
 - Add documentation to ArnaDrawer
 - Convert Styles.accentColor to ArnaColors.accentColor
-- Update Readme
+- Update README
 
 ## 0.1.1
 
@@ -351,7 +820,7 @@
 - Update ArnaSwitchListTile
 - Update ArnaSwitch
 - Update ArnaTextField
-- Update Readme
+- Update README
 
 ## 0.0.6
 
@@ -360,7 +829,7 @@
 - Update ArnaButton
 - Update ArnaLinkedButtons
 - Update ArnaCheckBox
-- Update Readme
+- Update README
 
 ## 0.0.5
 
@@ -369,11 +838,11 @@
 - Add ArnaMasterItem
 - Update ArnaLinkedButtons
 - Update ArnaListTile
-- Update Readme
+- Update README
 
 ## 0.0.4
 
-- Update Readme
+- Update README
 - Add Typography to Example
 - Update ArnaBottomBarItem
 - Update ArnaSideBarItem
